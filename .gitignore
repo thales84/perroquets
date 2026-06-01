@@ -1,2 +1,4 @@
 configuration/config.php
 medias/oiseaux/*
+fix-admin-hash.php
+base-de-donnees/generer-hash-admin.php

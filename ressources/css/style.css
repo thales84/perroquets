@@ -1,0 +1,896 @@
+/* ============================================================
+   Maple Perroquets — Feuille de style principale
+   Thème par variables CSS, mobile-first, clair/sombre adaptatif
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Variables — thème clair (défaut)
+   ------------------------------------------------------------ */
+:root {
+    --couleur-fond:          #f8f5f0;
+    --couleur-fond-alt:      #ffffff;
+    --couleur-texte:         #1a1a1a;
+    --couleur-texte-discret: #5a5a5a;
+    --couleur-primaire:      #2d7a4f;   /* vert forêt */
+    --couleur-primaire-hover:#225f3c;
+    --couleur-secondaire:    #e07b39;   /* ambre tropical */
+    --couleur-secondaire-hover: #c4662a;
+    --couleur-bordure:       #ddd5c8;
+    --couleur-carte:         #ffffff;
+    --couleur-carte-ombre:   rgba(0, 0, 0, 0.08);
+    --couleur-entete:        #ffffff;
+    --couleur-pied:          #2d3a2e;
+    --couleur-pied-texte:    #c8d8cb;
+    --couleur-badge-dispo:   #2d7a4f;
+    --couleur-badge-reserve: #c08000;
+    --couleur-badge-vendu:   #888888;
+
+    --police-base:    'Segoe UI', system-ui, Arial, sans-serif;
+    --taille-base:    1rem;
+    --rayon-bordure:  0.5rem;
+    --ombre-carte:    0 2px 8px var(--couleur-carte-ombre);
+    --transition:     0.2s ease;
+    --largeur-max:    1200px;
+}
+
+/* ------------------------------------------------------------
+   Variables — thème sombre
+   ------------------------------------------------------------ */
+[data-theme="sombre"] {
+    --couleur-fond:          #1a1f1b;
+    --couleur-fond-alt:      #232b24;
+    --couleur-texte:         #e8ede9;
+    --couleur-texte-discret: #9aaa9c;
+    --couleur-primaire:      #5ab87f;
+    --couleur-primaire-hover:#7acf98;
+    --couleur-secondaire:    #f09a5a;
+    --couleur-secondaire-hover: #f4b07a;
+    --couleur-bordure:       #3a463c;
+    --couleur-carte:         #232b24;
+    --couleur-carte-ombre:   rgba(0, 0, 0, 0.3);
+    --couleur-entete:        #1a1f1b;
+    --couleur-pied:          #111611;
+    --couleur-pied-texte:    #8a9e8c;
+    --couleur-badge-dispo:   #5ab87f;
+    --couleur-badge-reserve: #d4a030;
+    --couleur-badge-vendu:   #666666;
+}
+
+/* ------------------------------------------------------------
+   Réinitialisation et base
+   ------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--police-base);
+    font-size: var(--taille-base);
+    background-color: var(--couleur-fond);
+    color: var(--couleur-texte);
+    line-height: 1.6;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    transition: background-color var(--transition), color var(--transition);
+}
+
+main#contenu-principal {
+    flex: 1;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    color: var(--couleur-primaire);
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+a:hover,
+a:focus {
+    color: var(--couleur-primaire-hover);
+    text-decoration: underline;
+}
+
+ul {
+    list-style: none;
+}
+
+address {
+    font-style: normal;
+}
+
+/* ------------------------------------------------------------
+   En-tête et navigation
+   ------------------------------------------------------------ */
+.entete-site {
+    background-color: var(--couleur-entete);
+    border-bottom: 1px solid var(--couleur-bordure);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 4px var(--couleur-carte-ombre);
+}
+
+.entete-interieur {
+    max-width: var(--largeur-max);
+    margin: 0 auto;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+    color: var(--couleur-texte);
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+
+.logo:hover {
+    color: var(--couleur-primaire);
+    text-decoration: none;
+}
+
+.logo-icone {
+    font-size: 1.4rem;
+}
+
+.entete-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+/* Bouton thème */
+.bouton-theme {
+    background: none;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    padding: 0.35rem 0.6rem;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: var(--couleur-texte);
+    transition: background-color var(--transition), border-color var(--transition);
+}
+
+.bouton-theme:hover {
+    background-color: var(--couleur-fond-alt);
+    border-color: var(--couleur-primaire);
+}
+
+/* Bouton hamburger (mobile) */
+.bouton-hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 2rem;
+    height: 1.4rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.bouton-hamburger .barre {
+    display: block;
+    height: 2px;
+    background-color: var(--couleur-texte);
+    border-radius: 2px;
+    transition: transform var(--transition), opacity var(--transition);
+}
+
+/* Navigation principale — mobile : masquée par défaut */
+.navigation-principale {
+    display: none;
+    width: 100%;
+    order: 3;
+    border-top: 1px solid var(--couleur-bordure);
+    padding-top: 0.5rem;
+}
+
+.navigation-principale.ouverte {
+    display: block;
+}
+
+.navigation-principale ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.navigation-principale a {
+    display: block;
+    padding: 0.6rem 0.5rem;
+    color: var(--couleur-texte);
+    font-weight: 500;
+    border-radius: var(--rayon-bordure);
+    transition: background-color var(--transition), color var(--transition);
+}
+
+.navigation-principale a:hover,
+.navigation-principale a:focus {
+    background-color: var(--couleur-fond-alt);
+    color: var(--couleur-primaire);
+    text-decoration: none;
+}
+
+/* Bureau : hamburger masqué, nav horizontale visible */
+@media (min-width: 992px) {
+    .bouton-hamburger {
+        display: none;
+    }
+
+    .navigation-principale {
+        display: flex !important;
+        width: auto;
+        order: 0;
+        border-top: none;
+        padding-top: 0;
+        margin-left: 2rem;
+    }
+
+    .navigation-principale ul {
+        flex-direction: row;
+        gap: 0.25rem;
+    }
+
+    .navigation-principale a {
+        padding: 0.4rem 0.75rem;
+    }
+}
+
+/* ------------------------------------------------------------
+   Contenu principal — conteneur
+   ------------------------------------------------------------ */
+.conteneur {
+    max-width: var(--largeur-max);
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+}
+
+/* ------------------------------------------------------------
+   Héros / bannière d'accueil
+   ------------------------------------------------------------ */
+.heros {
+    background: linear-gradient(135deg, var(--couleur-primaire) 0%, #1a4d32 100%);
+    color: #ffffff;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.heros h1 {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+}
+
+.heros p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
+}
+
+@media (min-width: 600px) {
+    .heros h1 {
+        font-size: 2.6rem;
+    }
+}
+
+/* ------------------------------------------------------------
+   Boutons
+   ------------------------------------------------------------ */
+.bouton {
+    display: inline-block;
+    padding: 0.65rem 1.4rem;
+    border-radius: var(--rayon-bordure);
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.bouton-primaire {
+    background-color: var(--couleur-primaire);
+    color: #ffffff;
+    border-color: var(--couleur-primaire);
+}
+
+.bouton-primaire:hover,
+.bouton-primaire:focus {
+    background-color: var(--couleur-primaire-hover);
+    border-color: var(--couleur-primaire-hover);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.bouton-secondaire {
+    background-color: var(--couleur-secondaire);
+    color: #ffffff;
+    border-color: var(--couleur-secondaire);
+}
+
+.bouton-secondaire:hover,
+.bouton-secondaire:focus {
+    background-color: var(--couleur-secondaire-hover);
+    border-color: var(--couleur-secondaire-hover);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.bouton-contour {
+    background-color: transparent;
+    color: var(--couleur-primaire);
+    border-color: var(--couleur-primaire);
+}
+
+.bouton-contour:hover,
+.bouton-contour:focus {
+    background-color: var(--couleur-primaire);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* ------------------------------------------------------------
+   Grille de cartes (liste oiseaux) — mobile-first
+   ------------------------------------------------------------ */
+.grille-oiseaux {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+}
+
+@media (min-width: 600px) {
+    .grille-oiseaux {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .grille-oiseaux {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ------------------------------------------------------------
+   Carte oiseau
+   ------------------------------------------------------------ */
+.carte-oiseau {
+    background-color: var(--couleur-carte);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    box-shadow: var(--ombre-carte);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.carte-oiseau:hover {
+    box-shadow: 0 4px 16px var(--couleur-carte-ombre);
+    transform: translateY(-2px);
+}
+
+.carte-oiseau__image {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background-color: var(--couleur-fond-alt);
+}
+
+.carte-oiseau__image--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    aspect-ratio: 4 / 3;
+    background-color: var(--couleur-fond-alt);
+    color: var(--couleur-texte-discret);
+}
+
+.carte-oiseau__corps {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.carte-oiseau__espece {
+    font-size: 0.8rem;
+    color: var(--couleur-texte-discret);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.carte-oiseau__nom {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--couleur-texte);
+}
+
+.carte-oiseau__prix {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--couleur-primaire);
+    margin-top: auto;
+    padding-top: 0.5rem;
+}
+
+.carte-oiseau__pied {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--couleur-bordure);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ------------------------------------------------------------
+   Barre de filtres
+   ------------------------------------------------------------ */
+.filtres {
+    background-color: var(--couleur-fond-alt);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.filtres-groupe {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.filtres-groupe label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--couleur-texte-discret);
+    white-space: nowrap;
+}
+
+.filtres-groupe select {
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    background-color: var(--couleur-fond);
+    color: var(--couleur-texte);
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.filtres-groupe select:focus {
+    outline: 2px solid var(--couleur-primaire);
+    outline-offset: 1px;
+}
+
+.aucun-resultat {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--couleur-texte-discret);
+    font-size: 1.05rem;
+}
+
+/* ------------------------------------------------------------
+   Badges de statut
+   ------------------------------------------------------------ */
+.badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #fff;
+}
+
+.badge--disponible { background-color: var(--couleur-badge-dispo); }
+.badge--reserve    { background-color: var(--couleur-badge-reserve); }
+.badge--vendu      { background-color: var(--couleur-badge-vendu); }
+
+/* ------------------------------------------------------------
+   Pied de page
+   ------------------------------------------------------------ */
+.pied-site {
+    background-color: var(--couleur-pied);
+    color: var(--couleur-pied-texte);
+    margin-top: 3rem;
+}
+
+.pied-interieur {
+    max-width: var(--largeur-max);
+    margin: 0 auto;
+    padding: 2.5rem 1rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 600px) {
+    .pied-interieur {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.pied-section h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.75rem;
+    color: #ffffff;
+    opacity: 0.7;
+}
+
+.pied-section ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.pied-section a {
+    color: var(--couleur-pied-texte);
+    transition: color var(--transition);
+}
+
+.pied-section a:hover {
+    color: #ffffff;
+}
+
+.pied-logo {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.pied-bas {
+    max-width: var(--largeur-max);
+    margin: 0 auto;
+    padding: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    opacity: 0.6;
+}
+
+/* ------------------------------------------------------------
+   Fil d'Ariane
+   ------------------------------------------------------------ */
+.fil-ariane {
+    font-size: 0.85rem;
+    color: var(--couleur-texte-discret);
+    margin-bottom: 1.25rem;
+}
+
+.fil-ariane a {
+    color: var(--couleur-texte-discret);
+}
+
+.fil-ariane a:hover {
+    color: var(--couleur-primaire);
+}
+
+/* ------------------------------------------------------------
+   Fiche oiseau
+   ------------------------------------------------------------ */
+.fiche-oiseau {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .fiche-oiseau {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+}
+
+/* Galerie */
+.galerie-img-principale {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--rayon-bordure);
+    border: 1px solid var(--couleur-bordure);
+}
+
+.galerie-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 3;
+    font-size: 6rem;
+    background-color: var(--couleur-fond-alt);
+    border-radius: var(--rayon-bordure);
+    border: 1px solid var(--couleur-bordure);
+}
+
+.galerie-miniatures {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.galerie-miniature {
+    padding: 0;
+    border: 2px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    cursor: pointer;
+    overflow: hidden;
+    background: none;
+    width: 5rem;
+    height: 5rem;
+    transition: border-color var(--transition);
+}
+
+.galerie-miniature img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.galerie-miniature.active,
+.galerie-miniature:hover {
+    border-color: var(--couleur-primaire);
+}
+
+/* Infos fiche */
+.fiche-titre {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+}
+
+.fiche-titre-detail {
+    display: block;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--couleur-texte-discret);
+    margin-top: 0.25rem;
+}
+
+.fiche-indisponible {
+    background-color: var(--couleur-fond-alt);
+    border: 1px solid var(--couleur-bordure);
+    border-left: 4px solid var(--couleur-badge-vendu);
+    border-radius: var(--rayon-bordure);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.fiche-tableau {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+}
+
+.fiche-tableau th,
+.fiche-tableau td {
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--couleur-bordure);
+    text-align: left;
+    vertical-align: top;
+}
+
+.fiche-tableau th {
+    width: 40%;
+    color: var(--couleur-texte-discret);
+    font-weight: 600;
+}
+
+.fiche-prix {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--couleur-primaire);
+}
+
+.fiche-bouton-resa {
+    display: block;
+    text-align: center;
+    margin: 1.25rem 0;
+    font-size: 1.05rem;
+}
+
+.fiche-description {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--couleur-bordure);
+}
+
+.fiche-description h2 {
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+}
+
+.fiche-retour-lien {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.texte-discret {
+    color: var(--couleur-texte-discret);
+    font-size: 0.9em;
+}
+
+/* 404 */
+.erreur-404 {
+    padding: 4rem 1rem;
+}
+
+.erreur-404__icone {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+}
+
+.erreur-404 h1 {
+    margin-bottom: 1rem;
+}
+
+.erreur-404 p {
+    margin-bottom: 1.5rem;
+    color: var(--couleur-texte-discret);
+}
+
+/* ------------------------------------------------------------
+   Formulaire de réservation
+   ------------------------------------------------------------ */
+.resa-rappel {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    background-color: var(--couleur-fond-alt);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.resa-rappel__photo {
+    width: 6rem;
+    height: 6rem;
+    object-fit: cover;
+    border-radius: var(--rayon-bordure);
+    flex-shrink: 0;
+}
+
+.resa-rappel__espece {
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.resa-rappel__prix {
+    color: var(--couleur-primaire);
+    font-weight: 600;
+}
+
+.resa-formulaire {
+    max-width: 560px;
+}
+
+.champ {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1.1rem;
+}
+
+.champ label {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.champ input,
+.champ select,
+.champ textarea {
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    background-color: var(--couleur-fond);
+    color: var(--couleur-texte);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color var(--transition);
+}
+
+.champ input:focus,
+.champ select:focus,
+.champ textarea:focus {
+    outline: 2px solid var(--couleur-primaire);
+    outline-offset: 1px;
+    border-color: var(--couleur-primaire);
+}
+
+.champ--erreur input,
+.champ--erreur select,
+.champ--erreur textarea {
+    border-color: #c0392b;
+}
+
+.champ__erreur {
+    font-size: 0.85rem;
+    color: #c0392b;
+}
+
+.resa-erreur-global {
+    background-color: #fdecea;
+    border: 1px solid #c0392b;
+    border-radius: var(--rayon-bordure);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    color: #c0392b;
+    font-size: 0.95rem;
+}
+
+/* Honeypot — caché visuellement ET pour les lecteurs d'écran */
+.resa-honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Confirmation */
+.confirmation {
+    padding: 4rem 1rem;
+}
+
+.confirmation__icone {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.confirmation h1 {
+    margin-bottom: 1rem;
+}
+
+.confirmation p {
+    margin-bottom: 1.5rem;
+    color: var(--couleur-texte-discret);
+}
+
+/* ------------------------------------------------------------
+   Utilitaires
+   ------------------------------------------------------------ */
+.texte-centre  { text-align: center; }
+.marge-bas-1   { margin-bottom: 1rem; }
+.marge-bas-2   { margin-bottom: 2rem; }
+.visiblement-masque {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}

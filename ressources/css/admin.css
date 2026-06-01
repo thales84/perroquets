@@ -1,0 +1,528 @@
+/* ============================================================
+   Maple Perroquets — Styles back-office admin
+   Complète style.css (variables partagées)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Page de connexion
+   ------------------------------------------------------------ */
+.page-connexion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100dvh;
+    background-color: var(--couleur-fond);
+}
+
+.connexion-enveloppe {
+    background-color: var(--couleur-carte);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    box-shadow: var(--ombre-carte);
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+}
+
+.connexion-enveloppe h1 {
+    font-size: 1.6rem;
+    margin-bottom: 0.25rem;
+}
+
+.connexion-sous-titre {
+    color: var(--couleur-texte-discret);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.connexion-enveloppe .resa-formulaire {
+    text-align: left;
+    max-width: 100%;
+}
+
+/* ------------------------------------------------------------
+   En-tête admin
+   ------------------------------------------------------------ */
+.entete-admin {
+    background-color: var(--couleur-entete);
+    border-bottom: 1px solid var(--couleur-bordure);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 4px var(--couleur-carte-ombre);
+}
+
+.entete-admin-interieur {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.nav-admin ul {
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.nav-admin a {
+    display: block;
+    padding: 0.35rem 0.7rem;
+    border-radius: var(--rayon-bordure);
+    color: var(--couleur-texte);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color var(--transition), color var(--transition);
+}
+
+.nav-admin a:hover,
+.nav-admin a:focus,
+.nav-admin a.active {
+    background-color: var(--couleur-primaire);
+    color: #fff;
+    text-decoration: none;
+}
+
+.admin-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bouton-sm {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.85rem;
+}
+
+/* ------------------------------------------------------------
+   Contenu principal admin
+   ------------------------------------------------------------ */
+.admin-main {
+    background-color: var(--couleur-fond);
+    min-height: calc(100dvh - 60px);
+}
+
+.admin-conteneur {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+}
+
+.admin-conteneur h1 {
+    margin-bottom: 0.25rem;
+}
+
+/* ------------------------------------------------------------
+   Tableau de bord
+   ------------------------------------------------------------ */
+.dashboard-grille {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+@media (min-width: 600px) {
+    .dashboard-grille {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.dashboard-carte {
+    background-color: var(--couleur-carte);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    padding: 1.25rem 1rem;
+    text-align: center;
+    border-top: 4px solid var(--couleur-bordure);
+}
+
+.dashboard-carte--vert   { border-top-color: var(--couleur-badge-dispo); }
+.dashboard-carte--orange { border-top-color: var(--couleur-badge-reserve); }
+.dashboard-carte--gris   { border-top-color: var(--couleur-badge-vendu); }
+.dashboard-carte--alerte { border-top-color: var(--couleur-secondaire); }
+
+.dashboard-nombre {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+    color: var(--couleur-texte);
+}
+
+.dashboard-label {
+    font-size: 0.85rem;
+    color: var(--couleur-texte-discret);
+}
+
+.dashboard-lien {
+    display: block;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    color: var(--couleur-primaire);
+}
+
+.dashboard-raccourcis {
+    margin-top: 2rem;
+}
+
+.dashboard-raccourcis h2 {
+    font-size: 1.05rem;
+    margin-bottom: 0.75rem;
+}
+
+.raccourcis-grille {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+/* ------------------------------------------------------------
+   Tableaux admin (liste d'enregistrements)
+   ------------------------------------------------------------ */
+.tableau-admin {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    background-color: var(--couleur-carte);
+    border-radius: var(--rayon-bordure);
+    overflow: hidden;
+    box-shadow: var(--ombre-carte);
+}
+
+.tableau-admin th,
+.tableau-admin td {
+    padding: 0.7rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--couleur-bordure);
+    vertical-align: middle;
+}
+
+.tableau-admin th {
+    background-color: var(--couleur-fond-alt);
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--couleur-texte-discret);
+}
+
+.tableau-admin tr:last-child td {
+    border-bottom: none;
+}
+
+.tableau-admin tr:hover td {
+    background-color: var(--couleur-fond-alt);
+}
+
+/* ------------------------------------------------------------
+   En-tête de page admin (titre + bouton d'action)
+   ------------------------------------------------------------ */
+.admin-entete-page {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.admin-entete-page h1 {
+    margin-bottom: 0;
+}
+
+/* Alertes */
+.alerte {
+    padding: 0.75rem 1rem;
+    border-radius: var(--rayon-bordure);
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.alerte--succes {
+    background-color: #d4edda;
+    border: 1px solid #2d7a4f;
+    color: #1a4d32;
+}
+
+.alerte--erreur {
+    background-color: #fdecea;
+    border: 1px solid #c0392b;
+    color: #c0392b;
+}
+
+[data-theme="sombre"] .alerte--succes {
+    background-color: #1a3326;
+    border-color: #5ab87f;
+    color: #5ab87f;
+}
+
+[data-theme="sombre"] .alerte--erreur {
+    background-color: #3a1a1a;
+    border-color: #e05a5a;
+    color: #e05a5a;
+}
+
+/* Cellule actions tableau */
+.actions-cellule {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.bouton-danger {
+    background-color: transparent;
+    color: #c0392b;
+    border-color: #c0392b;
+}
+
+.bouton-danger:hover,
+.bouton-danger:focus {
+    background-color: #c0392b;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Formulaire admin */
+.formulaire-admin {
+    max-width: 640px;
+}
+
+.form-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.75rem;
+}
+
+/* Bloc EN replié */
+.bloc-en {
+    margin-bottom: 1rem;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    padding: 0.1rem 0;
+}
+
+.bloc-en summary {
+    padding: 0.65rem 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.bloc-en-contenu {
+    padding: 0.5rem 1rem 0.5rem;
+    border-top: 1px solid var(--couleur-bordure);
+}
+
+/* Statut rapide dans la liste */
+.statut-rapide {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.8rem;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    background-color: var(--couleur-fond);
+    color: var(--couleur-texte);
+    cursor: pointer;
+}
+
+/* Grille modifier (données + photos côte à côte en bureau) */
+.modifier-grille {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 900px) {
+    .modifier-grille {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+}
+
+.modifier-grille h2 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--couleur-bordure);
+}
+
+/* Upload */
+.formulaire-upload {
+    background-color: var(--couleur-fond-alt);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Grille photos */
+.photos-grille {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.photo-vignette {
+    position: relative;
+    border: 2px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    overflow: hidden;
+    background-color: var(--couleur-fond-alt);
+}
+
+.photo-vignette--principale {
+    border-color: var(--couleur-primaire);
+}
+
+.photo-vignette img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+}
+
+.badge-principale {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    background-color: var(--couleur-primaire);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.1rem 0.4rem;
+    border-radius: 2rem;
+}
+
+.photo-actions {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.35rem;
+    background-color: var(--couleur-fond-alt);
+    flex-wrap: wrap;
+}
+
+.bouton-xs {
+    padding: 0.15rem 0.45rem;
+    font-size: 0.72rem;
+}
+
+.champ-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Badges réservation */
+.badge-resa {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.badge-resa--nouvelle { background-color: var(--couleur-secondaire); color: #fff; }
+.badge-resa--traitee  { background-color: var(--couleur-badge-dispo); color: #fff; }
+.badge-resa--annulee  { background-color: var(--couleur-badge-vendu); color: #fff; }
+
+.badge-xs { font-size: 0.68rem; padding: 0.1rem 0.4rem; }
+
+/* Ligne nouvelle en surbrillance */
+.ligne-nouvelle td {
+    background-color: rgba(224, 123, 57, 0.08);
+}
+
+/* Compteur en-tête */
+.badge-compteur {
+    display: inline-block;
+    background-color: var(--couleur-secondaire);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.15rem 0.55rem;
+    border-radius: 2rem;
+    vertical-align: middle;
+    margin-left: 0.5rem;
+}
+
+/* Grille détail réservation */
+.detail-grille {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .detail-grille {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+}
+
+.detail-section h2 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--couleur-bordure);
+}
+
+.detail-section h3 {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: var(--couleur-texte-discret);
+}
+
+.message-client {
+    margin-top: 1.25rem;
+}
+
+.message-client h3 {
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+    color: var(--couleur-texte-discret);
+}
+
+.message-client blockquote {
+    border-left: 3px solid var(--couleur-bordure);
+    padding-left: 0.75rem;
+    color: var(--couleur-texte);
+    font-style: italic;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.action-bloc {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    background-color: var(--couleur-fond-alt);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+}
+
+/* ------------------------------------------------------------
+   Pied admin
+   ------------------------------------------------------------ */
+.pied-admin {
+    background-color: var(--couleur-fond-alt);
+    border-top: 1px solid var(--couleur-bordure);
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--couleur-texte-discret);
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}

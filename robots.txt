@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /fr/
+Allow: /ressources/
+
+Disallow: /admin/
+Disallow: /configuration/
+Disallow: /base-de-donnees/
+Disallow: /modeles/
+Disallow: /gabarits/
+Disallow: /langues/
+Disallow: /pages/
+
+Sitemap: https://mapleperroquets.com/sitemap.xml

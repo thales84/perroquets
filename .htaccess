@@ -1,0 +1,87 @@
+# ============================================================
+# Projet : mapleperroquets.com
+# Réécriture d'URL Apache — mod_rewrite requis
+# ============================================================
+
+Options -Indexes
+RewriteEngine On
+# Sous-dossier local : /perroquets/ — à supprimer en production (site à la racine)
+RewriteBase /perroquets/
+
+# ------------------------------------------------------------
+# Protection des dossiers sensibles (403)
+# ------------------------------------------------------------
+RewriteRule ^(configuration|base-de-donnees|modeles)(/.*)?$ - [F,L]
+
+# ------------------------------------------------------------
+# Forcer HTTPS (décommenter en production)
+# ------------------------------------------------------------
+# RewriteCond %{HTTPS} off
+# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# ------------------------------------------------------------
+# Redirection racine vers /fr/
+# ------------------------------------------------------------
+RewriteRule ^$ fr/ [R=302,L]
+
+# ------------------------------------------------------------
+# Routes françaises (fichiers réels servis directement)
+# ------------------------------------------------------------
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^fr/oiseaux/?$ index.php?page=oiseaux&langue=fr [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^fr/espece/([a-z0-9-]+)/?$ index.php?page=espece&slug=$1&langue=fr [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^fr/oiseau/([a-z0-9-]+)/?$ index.php?page=oiseau&slug=$1&langue=fr [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^fr/reservation/([a-z0-9-]+)/?$ index.php?page=reservation&slug=$1&langue=fr [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^fr/confirmation/?$ index.php?page=confirmation&langue=fr [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^fr/?$ index.php?page=accueil&langue=fr [QSA,L]
+
+# ------------------------------------------------------------
+# Routes anglaises (commentées — à activer à l'étape bilingue)
+# ------------------------------------------------------------
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^en/oiseaux/?$ index.php?page=oiseaux&langue=en [QSA,L]
+
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^en/espece/([a-z0-9-]+)/?$ index.php?page=espece&slug=$1&langue=en [QSA,L]
+
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^en/oiseau/([a-z0-9-]+)/?$ index.php?page=oiseau&slug=$1&langue=en [QSA,L]
+
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^en/reservation/([a-z0-9-]+)/?$ index.php?page=reservation&slug=$1&langue=en [QSA,L]
+
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^en/?$ index.php?page=accueil&langue=en [QSA,L]
+
+# ------------------------------------------------------------
+# Sitemap (préparé pour l'étape 08)
+# ------------------------------------------------------------
+RewriteRule ^sitemap\.xml$ plan-du-site.php [L]
+
+# ------------------------------------------------------------
+# Section admin
+# ------------------------------------------------------------
+RewriteRule ^admin/?$ admin/index.php [L]
+RewriteRule ^admin/([a-z0-9-]+)/?$ admin/$1.php [L]
