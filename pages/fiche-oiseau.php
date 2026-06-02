@@ -39,17 +39,52 @@ foreach ($photos as $p) {
     if ($p['est_principale']) { $ogImage = URL_SITE . $p['chemin_fichier']; break; }
 }
 
-/* JSON-LD */
+/* JSON-LD : Product enrichi (orienté Canada) + fil d'Ariane, en @graph */
+$siteNom = param('site_nom', 'Maple Perroquets');
+
+$produit = [
+    '@type'         => 'Product',
+    'name'          => $titrePage,
+    'description'   => $extraitDesc,
+    'image'         => $ogImage ?? '',
+    'category'      => 'Animaux de compagnie › Perroquets',
+    'itemCondition' => 'https://schema.org/NewCondition',
+    'brand'         => ['@type' => 'Brand', 'name' => $siteNom],
+    'offers'        => [
+        '@type'           => 'Offer',
+        'priceCurrency'   => 'CAD',
+        'price'           => $oiseau['prix_cad'] ?? '0',
+        'availability'    => $disponible ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut',
+        'url'             => $urlCanonique,
+        'priceValidUntil' => date('Y-m-d', strtotime('+30 days')),
+        'areaServed'      => ['@type' => 'Country', 'name' => 'Canada'],
+        'seller'          => ['@type' => 'Organization', 'name' => $siteNom],
+    ],
+];
+if (!empty($oiseau['num_bague'])) {
+    $produit['sku'] = $oiseau['num_bague'];
+}
+
+$ariane = [
+    ['nom' => 'Accueil',             'url' => URL_SITE . '/' . $langue . '/'],
+    ['nom' => 'Oiseaux disponibles', 'url' => URL_SITE . '/' . $langue . '/oiseaux'],
+    ['nom' => $nomEspece,            'url' => $urlCanonique],
+];
+$filAriane = [];
+foreach ($ariane as $i => $el) {
+    $filAriane[] = [
+        '@type'    => 'ListItem',
+        'position' => $i + 1,
+        'name'     => $el['nom'],
+        'item'     => $el['url'],
+    ];
+}
+
 $jsonLd = json_encode([
-    '@context' => 'https://schema.org', '@type' => 'Product',
-    'name'        => $titrePage,
-    'description' => $extraitDesc,
-    'image'       => $ogImage ?? '',
-    'offers'      => [
-        '@type' => 'Offer', 'priceCurrency' => 'CAD',
-        'price' => $oiseau['prix_cad'] ?? '0',
-        'availability' => $disponible ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut',
-        'url' => $urlCanonique,
+    '@context' => 'https://schema.org',
+    '@graph'   => [
+        $produit,
+        ['@type' => 'BreadcrumbList', 'itemListElement' => $filAriane],
     ],
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 

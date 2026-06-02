@@ -9,6 +9,7 @@ if (str_contains($cheminScript, '/especes/'))           $sectionActive = 'espece
 elseif (str_contains($cheminScript, '/oiseaux/'))        $sectionActive = 'oiseaux';
 elseif (str_contains($cheminScript, '/reservations/'))   $sectionActive = 'reservations';
 elseif (str_contains($cheminScript, '/compte.php'))      $sectionActive = 'compte';
+elseif (str_contains($cheminScript, '/parametres.php'))  $sectionActive = 'parametres';
 
 // Badge : nombre de nouvelles réservations
 $nbNouvelles = 0;
@@ -90,6 +91,10 @@ $identifiantAdmin = htmlspecialchars($_SESSION['admin_identifiant'] ?? 'Admin', 
         </nav>
 
         <div class="admin-sidebar-bas">
+            <a href="<?= echapper(URL_SITE) ?>/admin/parametres.php"
+               class="admin-nav-item <?= $sectionActive === 'parametres' ? 'actif' : '' ?>">
+                <span class="admin-nav-icone">⚙️</span> Paramètres
+            </a>
             <a href="<?= echapper(URL_SITE) ?>/admin/compte.php"
                class="admin-nav-item <?= $sectionActive === 'compte' ? 'actif' : '' ?>">
                 <span class="admin-nav-icone">🔑</span> Mon compte

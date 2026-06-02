@@ -818,3 +818,41 @@
     gap: 1.5rem;
     flex-wrap: wrap;
 }
+
+/* ------------------------------------------------------------
+   Page Paramètres — sections groupées
+   ------------------------------------------------------------ */
+.param-section {
+    background: var(--couleur-carte);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.param-section h2 {
+    font-size: 1.15rem;
+    margin: 0 0 1.25rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--couleur-bordure);
+}
+.param-section .champ { margin-bottom: 1.1rem; }
+.param-section .champ:last-child { margin-bottom: 0; }
+.param-section textarea {
+    width: 100%;
+    resize: vertical;
+    font: inherit;
+}
+.param-section code {
+    background: var(--couleur-fond-alt);
+    padding: 0.05rem 0.3rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+}
+.champ-bascule {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.champ-bascule input { width: auto; }

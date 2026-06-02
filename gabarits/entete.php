@@ -17,6 +17,16 @@ $jsonLd          ??= null;
 $langue = langueActive();
 $urlCourante = URL_SITE . '/' . $langue . '/' . ltrim(obtenirParametreUrl('page', ''), '/');
 
+// Nom du site + titre complet selon le gabarit configurable (%page% / %site%)
+$siteNom     = param('site_nom', 'Maple Perroquets');
+$titreComplet = str_replace(
+    ['%page%', '%site%'],
+    [$titrePage, $siteNom],
+    param('meta_titre_gabarit', '%page% — %site%')
+);
+// Image de partage : image de la page, sinon image par défaut configurée
+$ogImage = $ogImage ?: (param('partage_image') ?: null);
+
 // État de connexion client (session déjà démarrée par index.php)
 $clientConnecte = !empty($_SESSION['client_id']);
 $prenomClient   = htmlspecialchars($_SESSION['client_prenom'] ?? '', ENT_QUOTES);
@@ -26,8 +36,10 @@ $prenomClient   = htmlspecialchars($_SESSION['client_prenom'] ?? '', ENT_QUOTES)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= echapper($titrePage) ?> — Maple Perroquets</title>
+    <meta name="theme-color" content="#2d7a4f">
+    <title><?= echapper($titreComplet) ?></title>
     <meta name="description" content="<?= echapper($descriptionPage) ?>">
+    <?= genererMetaIndexation() ?>
 
     <!-- Anti-flash thème : inline obligatoire pour éviter le scintillement -->
     <script>
@@ -50,20 +62,30 @@ $prenomClient   = htmlspecialchars($_SESSION['client_prenom'] ?? '', ENT_QUOTES)
     <?php endif; ?>
 
     <?= genererOpenGraph([
-        'title'       => $titrePage . ' — Maple Perroquets',
+        'title'       => $titreComplet,
         'description' => $descriptionPage,
         'url'         => $urlCanonique ?? $urlCourante,
         'image'       => $ogImage ?? '',
         'type'        => 'website',
     ]) ?>
 
+    <?= genererTwitterCard([
+        'title'       => $titreComplet,
+        'description' => $descriptionPage,
+        'image'       => $ogImage ?? '',
+    ]) ?>
+
     <?= isset($hreflangChemin) ? genererHreflang($hreflangChemin) : '' ?>
 
+    <!-- Données structurées : Organization (global) -->
+    <script type="application/ld+json"><?= genererOrganisationJsonLd() ?></script>
     <?php if ($jsonLd): ?>
     <script type="application/ld+json"><?= $jsonLd ?></script>
     <?php endif; ?>
+    <?= genererScriptsAnalytics() ?>
 </head>
 <body>
+<?= genererGtmNoscript() ?>
 
 <!-- ============================================================
      Header sticky translucide
