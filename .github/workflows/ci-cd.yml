@@ -59,6 +59,9 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
+          port: 21
+          # Délai élargi : Hostinger peut être lent / throttlé sur gros upload.
+          timeout: 600000
           # Dossier racine web sur le serveur (ex. public_html/ sur cPanel).
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
           # Fichiers/dossiers jamais envoyés en production.
