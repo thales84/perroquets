@@ -19,6 +19,14 @@ RewriteEngine On
 # ------------------------------------------------------------
 RewriteRule ^(configuration|base-de-donnees|modeles)(/.*)?$ - [F,L]
 
+# Déploiement par clone Git (Hostinger) : bloquer les éléments du dépôt
+# qui ne doivent jamais être servis sur le web.
+RewriteRule ^(\.git|\.github|docs)(/.*)?$ - [F,L]
+
+# Bloquer tout fichier/dossier caché (dotfiles : .git, .env, .htpasswd...)
+# sauf /.well-known utilisé par Let's Encrypt.
+RewriteRule (^|/)\.(?!well-known)[^/]* - [F,L]
+
 # ------------------------------------------------------------
 # Forcer HTTPS — uniquement sur le domaine de production
 # ------------------------------------------------------------

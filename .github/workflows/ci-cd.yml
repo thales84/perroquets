@@ -38,11 +38,13 @@ jobs:
           fi
 
   # ----------------------------------------------------------
-  # Déploiement continu : rsync over SSH vers Hostinger (port 65002)
-  # Bien plus stable que FTPS pour les syncs complets.
+  # Déploiement continu : déclenche le "pull" Git côté Hostinger.
+  # Hostinger tire le dépôt (sortant) — aucune connexion entrante à
+  # filtrer, contrairement à SSH/FTP que Hostinger bloque depuis les
+  # IP de datacenters. Le webhook est appelé en HTTPS (port 443).
   # ----------------------------------------------------------
   deploy:
-    name: Déploiement SSH (prod)
+    name: Déploiement Git Hostinger (prod)
     needs: lint
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
@@ -50,30 +52,12 @@ jobs:
       group: deploy-prod
       cancel-in-progress: true
     steps:
-      - name: Récupérer le code
-        uses: actions/checkout@v4
-
-      - name: Déployer via rsync/SSH
-        uses: burnett01/rsync-deployments@7.0.1
-        with:
-          # -a archive, -z compression, -v verbeux. Pas de --delete pour ne
-          # jamais supprimer config.php / medias / fichiers hors dépôt.
-          # Les --exclude protègent aussi ces chemins de tout transfert.
-          switches: >-
-            -avz
-            --exclude='.git/'
-            --exclude='.github/'
-            --exclude='docs/'
-            --exclude='base-de-donnees/'
-            --exclude='configuration/config.php'
-            --exclude='medias/'
-            --exclude='*.md'
-            --exclude='fix-admin-hash.php'
-            --exclude='debloquer-admin.php'
-            --exclude='generer-hash-admin.php'
-          path: ./
-          remote_path: ${{ secrets.SSH_REMOTE_PATH }}
-          remote_host: ${{ secrets.SSH_HOST }}
-          remote_port: ${{ secrets.SSH_PORT }}
-          remote_user: ${{ secrets.SSH_USER }}
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Déclencher le déploiement Hostinger (webhook)
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' -X POST "${{ secrets.HOSTINGER_DEPLOY_HOOK }}")
+          echo "Réponse webhook Hostinger : HTTP $code"
+          # Hostinger renvoie 200 (ou 2xx) quand le pull est accepté.
+          case "$code" in
+            2*) echo "Déploiement déclenché." ;;
+            *)  echo "::error::Webhook Hostinger a répondu HTTP $code"; exit 1 ;;
+          esac
