@@ -8,6 +8,8 @@ $champs = [
     'site_nom', 'site_slogan', 'meta_titre_gabarit', 'meta_description', 'partage_image',
     // Réseaux sociaux
     'og_locale', 'twitter_compte', 'social_facebook', 'social_instagram',
+    // Contact & WhatsApp
+    'whatsapp_numero', 'whatsapp_message',
     // Indexation & Analytics
     'index_autoriser', 'verif_google', 'verif_bing', 'ga4_id', 'gtm_id', 'pixel_id',
 ];
@@ -113,6 +115,23 @@ require_once __DIR__ . '/inc/entete-admin.php';
             <div class="champ">
                 <label for="social_instagram">Compte Instagram (URL)</label>
                 <input type="url" id="social_instagram" name="social_instagram" value="<?= $val('social_instagram') ?>" placeholder="https://instagram.com/...">
+            </div>
+        </section>
+
+        <!-- ===================== Contact & WhatsApp ===================== -->
+        <section class="param-section">
+            <h2>Contact &amp; WhatsApp</h2>
+
+            <div class="champ">
+                <label for="whatsapp_numero">Numéro WhatsApp</label>
+                <input type="text" id="whatsapp_numero" name="whatsapp_numero" value="<?= $val('whatsapp_numero') ?>" placeholder="15145551234" maxlength="20">
+                <small class="texte-discret">Format international, chiffres uniquement (Canada = <code>1</code> + indicatif + numéro). Ex. <code>15145551234</code>. Laisser vide = pas de bouton.</small>
+            </div>
+
+            <div class="champ">
+                <label for="whatsapp_message">Message pré-rempli</label>
+                <textarea id="whatsapp_message" name="whatsapp_message" rows="2" maxlength="300"><?= $val('whatsapp_message', 'Bonjour, je suis intéressé par vos perroquets.') ?></textarea>
+                <small class="texte-discret">Texte inséré automatiquement dans la conversation quand le visiteur clique le bouton flottant.</small>
             </div>
         </section>
 

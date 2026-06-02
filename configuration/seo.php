@@ -192,6 +192,30 @@ function genererScriptsAnalytics(): string
 }
 
 /**
+ * Bouton WhatsApp flottant (coin bas-droit), affiché uniquement si un
+ * numéro est configuré dans les paramètres. Le numéro est nettoyé en
+ * chiffres uniquement (format international, ex. 1 + indicatif Canada).
+ */
+function genererBoutonWhatsapp(): string
+{
+    $numero = preg_replace('/\D/', '', param('whatsapp_numero'));
+    if ($numero === '') {
+        return '';
+    }
+    $message = param('whatsapp_message', 'Bonjour, je suis intéressé par vos perroquets.');
+    $url = 'https://wa.me/' . $numero . '?text=' . rawurlencode($message);
+    $e = fn(string $v) => htmlspecialchars($v, ENT_QUOTES, 'UTF-8');
+
+    return '<a href="' . $e($url) . '" class="wa-flottant" target="_blank" rel="noopener noreferrer"'
+        . ' aria-label="Nous contacter sur WhatsApp">'
+        . '<svg viewBox="0 0 32 32" width="30" height="30" fill="currentColor" aria-hidden="true">'
+        . '<path d="M16 .5C7.44.5.5 7.44.5 16c0 2.82.74 5.46 2.03 7.76L.5 31.5l7.93-2.03A15.45 15.45 0 0 0 16 31.5C24.56 31.5 31.5 24.56 31.5 16S24.56.5 16 .5zm0 28.2c-2.5 0-4.85-.67-6.87-1.85l-.49-.29-4.7 1.2 1.25-4.58-.32-.5A12.6 12.6 0 0 1 3.3 16C3.3 9 9 3.3 16 3.3S28.7 9 28.7 16 23 28.7 16 28.7zm7.07-9.5c-.39-.2-2.3-1.13-2.65-1.26-.36-.13-.62-.2-.88.2-.26.39-1 1.26-1.23 1.52-.23.26-.45.29-.84.1-.39-.2-1.64-.6-3.12-1.92-1.15-1.03-1.93-2.3-2.16-2.69-.23-.39-.02-.6.17-.8.18-.18.39-.46.59-.69.2-.23.26-.39.39-.65.13-.26.07-.49-.03-.69-.1-.2-.88-2.12-1.2-2.9-.32-.75-.64-.66-.88-.67l-.75-.01c-.26 0-.69.1-1.05.49-.36.39-1.38 1.35-1.38 3.29s1.41 3.82 1.61 4.08c.2.26 2.78 4.25 6.74 5.96.94.41 1.67.65 2.24.83.94.3 1.8.26 2.48.16.76-.11 2.3-.94 2.62-1.84.32-.9.32-1.68.23-1.84-.1-.16-.36-.26-.75-.46z"/>'
+        . '</svg>'
+        . '<span class="wa-flottant-pulse" aria-hidden="true"></span>'
+        . '</a>';
+}
+
+/**
  * Partie <body> du Google Tag Manager (balise noscript), si configuré.
  */
 function genererGtmNoscript(): string

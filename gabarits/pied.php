@@ -44,6 +44,8 @@
     </div>
 </footer>
 
+<?= genererBoutonWhatsapp() ?>
+
 <script src="<?= echapper(URL_SITE) ?>/assets/js/main.js"></script>
 </body>
 </html>
