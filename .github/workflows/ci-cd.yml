@@ -38,10 +38,11 @@ jobs:
           fi
 
   # ----------------------------------------------------------
-  # Déploiement continu : envoi FTP vers l'hébergement mutualisé
+  # Déploiement continu : rsync over SSH vers Hostinger (port 65002)
+  # Bien plus stable que FTPS pour les syncs complets.
   # ----------------------------------------------------------
   deploy:
-    name: Déploiement FTP (prod)
+    name: Déploiement SSH (prod)
     needs: lint
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
@@ -52,28 +53,27 @@ jobs:
       - name: Récupérer le code
         uses: actions/checkout@v4
 
-      - name: Déployer via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Déployer via rsync/SSH
+        uses: burnett01/rsync-deployments@7.0.1
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          port: 21
-          # Délai élargi : Hostinger peut être lent / throttlé sur gros upload.
-          timeout: 600000
-          # Dossier racine web sur le serveur (ex. public_html/ sur cPanel).
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          # Fichiers/dossiers jamais envoyés en production.
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/.github/**
-            configuration/config.php
-            docs/**
-            base-de-donnees/**
-            **/*.md
-            CLAUDE.md
-            fix-admin-hash.php
-            debloquer-admin.php
-            generer-hash-admin.php
+          # -a archive, -z compression, -v verbeux. Pas de --delete pour ne
+          # jamais supprimer config.php / medias / fichiers hors dépôt.
+          # Les --exclude protègent aussi ces chemins de tout transfert.
+          switches: >-
+            -avz
+            --exclude='.git/'
+            --exclude='.github/'
+            --exclude='docs/'
+            --exclude='base-de-donnees/'
+            --exclude='configuration/config.php'
+            --exclude='medias/'
+            --exclude='*.md'
+            --exclude='fix-admin-hash.php'
+            --exclude='debloquer-admin.php'
+            --exclude='generer-hash-admin.php'
+          path: ./
+          remote_path: ${{ secrets.SSH_REMOTE_PATH }}
+          remote_host: ${{ secrets.SSH_HOST }}
+          remote_port: ${{ secrets.SSH_PORT }}
+          remote_user: ${{ secrets.SSH_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
