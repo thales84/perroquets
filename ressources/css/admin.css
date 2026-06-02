@@ -856,3 +856,33 @@
     cursor: pointer;
 }
 .champ-bascule input { width: auto; }
+
+/* ------------------------------------------------------------
+   Paramètres — barre d'onglets
+   ------------------------------------------------------------ */
+.param-onglets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--couleur-bordure);
+}
+.param-onglet {
+    border: 0;
+    background: none;
+    font: inherit;
+    font-weight: 600;
+    color: var(--couleur-texte-discret);
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color var(--transition), border-color var(--transition);
+    white-space: nowrap;
+}
+.param-onglet:hover { color: var(--couleur-primaire); }
+.param-onglet.actif {
+    color: var(--couleur-primaire);
+    border-bottom-color: var(--couleur-primaire);
+}
+.param-panneau[hidden] { display: none; }

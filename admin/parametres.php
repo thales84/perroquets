@@ -59,8 +59,16 @@ require_once __DIR__ . '/inc/entete-admin.php';
     <form method="post" action="<?= echapper(URL_SITE) ?>/admin/parametres.php" class="formulaire-admin">
         <input type="hidden" name="csrf_token" value="<?= echapper(genererJetonCsrf()) ?>">
 
+        <!-- Barre d'onglets -->
+        <div class="param-onglets" role="tablist" aria-label="Sections des paramètres">
+            <button type="button" class="param-onglet actif" role="tab" data-cible="panel-general">Général</button>
+            <button type="button" class="param-onglet" role="tab" data-cible="panel-social">Réseaux sociaux</button>
+            <button type="button" class="param-onglet" role="tab" data-cible="panel-contact">Contact &amp; WhatsApp</button>
+            <button type="button" class="param-onglet" role="tab" data-cible="panel-indexation">Indexation &amp; Analytics</button>
+        </div>
+
         <!-- ===================== Général ===================== -->
-        <section class="param-section">
+        <section class="param-section param-panneau actif" id="panel-general" role="tabpanel">
             <h2>Général</h2>
 
             <div class="champ">
@@ -93,7 +101,7 @@ require_once __DIR__ . '/inc/entete-admin.php';
         </section>
 
         <!-- ===================== Réseaux sociaux ===================== -->
-        <section class="param-section">
+        <section class="param-section param-panneau" id="panel-social" role="tabpanel" hidden>
             <h2>Réseaux sociaux</h2>
 
             <div class="champ">
@@ -119,7 +127,7 @@ require_once __DIR__ . '/inc/entete-admin.php';
         </section>
 
         <!-- ===================== Contact & WhatsApp ===================== -->
-        <section class="param-section">
+        <section class="param-section param-panneau" id="panel-contact" role="tabpanel" hidden>
             <h2>Contact &amp; WhatsApp</h2>
 
             <div class="champ">
@@ -136,7 +144,7 @@ require_once __DIR__ . '/inc/entete-admin.php';
         </section>
 
         <!-- ===================== Indexation & Analytics ===================== -->
-        <section class="param-section">
+        <section class="param-section param-panneau" id="panel-indexation" role="tabpanel" hidden>
             <h2>Indexation &amp; Analytics</h2>
 
             <div class="champ">
@@ -178,5 +186,39 @@ require_once __DIR__ . '/inc/entete-admin.php';
         </div>
     </form>
 </div>
+
+<script>
+/* Onglets des paramètres — bascule sans rechargement, onglet mémorisé */
+(function () {
+    var onglets  = document.querySelectorAll('.param-onglet');
+    var panneaux = document.querySelectorAll('.param-panneau');
+    if (!onglets.length) return;
+
+    function activer(cible) {
+        onglets.forEach(function (o) {
+            var actif = o.dataset.cible === cible;
+            o.classList.toggle('actif', actif);
+            o.setAttribute('aria-selected', actif ? 'true' : 'false');
+        });
+        panneaux.forEach(function (p) {
+            var actif = p.id === cible;
+            p.classList.toggle('actif', actif);
+            p.hidden = !actif;
+        });
+        try { sessionStorage.setItem('param_onglet', cible); } catch (e) {}
+    }
+
+    onglets.forEach(function (o) {
+        o.addEventListener('click', function () { activer(o.dataset.cible); });
+    });
+
+    // Restaurer le dernier onglet ouvert (après enregistrement notamment)
+    var memo = null;
+    try { memo = sessionStorage.getItem('param_onglet'); } catch (e) {}
+    if (memo && document.getElementById(memo)) {
+        activer(memo);
+    }
+})();
+</script>
 
 <?php require_once __DIR__ . '/inc/pied-admin.php'; ?>
