@@ -88,42 +88,88 @@ if ($bloque) {
 </head>
 <body class="page-connexion">
 
-<main id="contenu-principal">
-    <div class="connexion-enveloppe">
-        <h1>🦜 Administration</h1>
-        <p class="connexion-sous-titre">Maple Perroquets</p>
+<button class="bouton-theme connexion-theme" id="bouton-theme" type="button" aria-label="Basculer le thème">
+    <span class="icone-theme" aria-hidden="true">☀️</span>
+</button>
 
-        <?php if ($erreur) : ?>
-            <div class="resa-erreur-global" role="alert"><?= echapper($erreur) ?></div>
-        <?php endif; ?>
+<main id="contenu-principal" class="connexion-page">
+    <div class="connexion-carte">
 
-        <form method="post" action="<?= echapper(URL_SITE) ?>/admin/connexion.php" class="resa-formulaire" novalidate>
-
-            <div class="champ">
-                <label for="identifiant">Identifiant</label>
-                <input type="text" id="identifiant" name="identifiant"
-                       autocomplete="username"
-                       required
-                       <?= $bloque ? 'disabled' : '' ?>>
+        <aside class="connexion-marque">
+            <div class="connexion-marque-fond"></div>
+            <div class="connexion-marque-contenu">
+                <div class="connexion-logo" aria-hidden="true">🦜</div>
+                <h2>Maple Perroquets</h2>
+                <p>Console d’administration</p>
+                <ul class="connexion-atouts">
+                    <li>🦜 Gestion des oiseaux &amp; espèces</li>
+                    <li>📋 Suivi des réservations</li>
+                    <li>🔒 Accès sécurisé et chiffré</li>
+                </ul>
             </div>
+        </aside>
 
-            <div class="champ">
-                <label for="mot_de_passe">Mot de passe</label>
-                <input type="password" id="mot_de_passe" name="mot_de_passe"
-                       autocomplete="current-password"
-                       required
-                       <?= $bloque ? 'disabled' : '' ?>>
-            </div>
+        <section class="connexion-panneau">
+            <header class="connexion-tete">
+                <h1>Connexion</h1>
+                <p class="connexion-sous-titre">Accédez à votre tableau de bord</p>
+            </header>
 
-            <button type="submit" class="bouton bouton-primaire" style="width:100%"
-                    <?= $bloque ? 'disabled' : '' ?>>
-                Se connecter
-            </button>
+            <?php if ($erreur) : ?>
+                <div class="alerte alerte--erreur" role="alert"><?= echapper($erreur) ?></div>
+            <?php endif; ?>
 
-        </form>
+            <form method="post" action="<?= echapper(URL_SITE) ?>/admin/connexion.php" class="connexion-formulaire" novalidate>
+
+                <div class="champ-icone">
+                    <label for="identifiant">Identifiant</label>
+                    <div class="champ-icone-rangee">
+                        <span class="champ-icone-symbole" aria-hidden="true">👤</span>
+                        <input type="text" id="identifiant" name="identifiant"
+                               autocomplete="username" required
+                               <?= $bloque ? 'disabled' : '' ?>>
+                    </div>
+                </div>
+
+                <div class="champ-icone">
+                    <label for="mot_de_passe">Mot de passe</label>
+                    <div class="champ-icone-rangee">
+                        <span class="champ-icone-symbole" aria-hidden="true">🔒</span>
+                        <input type="password" id="mot_de_passe" name="mot_de_passe"
+                               autocomplete="current-password" required
+                               <?= $bloque ? 'disabled' : '' ?>>
+                        <button type="button" class="champ-oeil" id="bascule-mdp"
+                                aria-label="Afficher le mot de passe"
+                                <?= $bloque ? 'disabled' : '' ?>>👁️</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="bouton bouton-primaire connexion-soumettre"
+                        <?= $bloque ? 'disabled' : '' ?>>
+                    Se connecter
+                </button>
+
+            </form>
+
+            <p class="connexion-pied">🔒 Réservé au personnel autorisé</p>
+        </section>
+
     </div>
 </main>
 
 <script src="<?= echapper(URL_SITE) ?>/ressources/js/theme.js"></script>
+<script>
+(function () {
+    var bouton = document.getElementById('bascule-mdp');
+    var champ  = document.getElementById('mot_de_passe');
+    if (!bouton || !champ) return;
+    bouton.addEventListener('click', function () {
+        var visible = champ.type === 'password';
+        champ.type = visible ? 'text' : 'password';
+        bouton.classList.toggle('actif', visible);
+        bouton.setAttribute('aria-label', visible ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+    });
+})();
+</script>
 </body>
 </html>

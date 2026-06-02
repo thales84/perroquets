@@ -4,41 +4,187 @@
    ============================================================ */
 
 /* ------------------------------------------------------------
-   Page de connexion
+   Page de connexion — écran scindé marque / formulaire
    ------------------------------------------------------------ */
 .page-connexion {
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100dvh;
-    background-color: var(--couleur-fond);
+    padding: 1.5rem;
+    background:
+        radial-gradient(1100px 550px at 100% 0%, color-mix(in srgb, var(--couleur-primaire) 12%, transparent), transparent 60%),
+        radial-gradient(900px 500px at 0% 100%, color-mix(in srgb, var(--couleur-secondaire) 12%, transparent), transparent 60%),
+        var(--couleur-fond);
 }
 
-.connexion-enveloppe {
-    background-color: var(--couleur-carte);
-    border: 1px solid var(--couleur-bordure);
-    border-radius: var(--rayon-bordure);
-    box-shadow: var(--ombre-carte);
-    padding: 2.5rem 2rem;
+.connexion-theme {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 5;
+}
+
+.connexion-carte {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
     width: 100%;
-    max-width: 380px;
-    text-align: center;
+    max-width: 860px;
+    background: var(--couleur-carte);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: calc(var(--rayon-bordure) * 2);
+    box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    animation: connexion-apparition 0.4s ease both;
 }
 
-.connexion-enveloppe h1 {
+@keyframes connexion-apparition {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Panneau marque (gauche) ---- */
+.connexion-marque {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 2.75rem;
+    color: #fff;
+    isolation: isolate;
+    overflow: hidden;
+}
+.connexion-marque-fond {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(150deg, var(--couleur-primaire) 0%, #1a4d32 100%);
+}
+.connexion-marque-fond::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(420px 220px at 85% 8%, rgba(224, 123, 57, 0.38), transparent 70%);
+}
+.connexion-logo {
+    font-size: 2.5rem;
+    line-height: 1;
+    width: 4.25rem;
+    height: 4.25rem;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 1rem;
+    margin-bottom: 1.25rem;
+}
+.connexion-marque h2 {
+    font-size: 1.5rem;
+    margin: 0 0 0.25rem;
+}
+.connexion-marque-contenu > p {
+    opacity: 0.85;
+    margin: 0 0 1.75rem;
+}
+.connexion-atouts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+}
+.connexion-atouts li {
+    font-size: 0.92rem;
+    opacity: 0.92;
+}
+
+/* ---- Panneau formulaire (droite) ---- */
+.connexion-panneau {
+    padding: 2.75rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.connexion-tete { margin-bottom: 1.5rem; }
+.connexion-panneau h1 {
     font-size: 1.6rem;
-    margin-bottom: 0.25rem;
+    margin: 0 0 0.3rem;
 }
-
 .connexion-sous-titre {
     color: var(--couleur-texte-discret);
-    margin-bottom: 1.5rem;
+    margin: 0;
     font-size: 0.95rem;
 }
 
-.connexion-enveloppe .resa-formulaire {
-    text-align: left;
-    max-width: 100%;
+.connexion-formulaire {
+    display: grid;
+    gap: 1.1rem;
+}
+.champ-icone label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--couleur-texte);
+}
+.champ-icone-rangee {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--couleur-fond-alt);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    padding: 0 0.75rem;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.champ-icone-rangee:focus-within {
+    border-color: var(--couleur-primaire);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--couleur-primaire) 22%, transparent);
+}
+.champ-icone-symbole {
+    font-size: 1rem;
+    opacity: 0.7;
+}
+.champ-icone-rangee input {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    padding: 0.7rem 0;
+    color: var(--couleur-texte);
+    font-size: 0.97rem;
+    outline: none;
+}
+.champ-oeil {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    opacity: 0.55;
+    padding: 0.25rem;
+    transition: opacity 0.15s;
+}
+.champ-oeil:hover,
+.champ-oeil.actif { opacity: 1; }
+
+.connexion-soumettre {
+    width: 100%;
+    margin-top: 0.4rem;
+    padding: 0.8rem;
+    font-size: 1rem;
+}
+.connexion-pied {
+    margin: 1.5rem 0 0;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--couleur-texte-discret);
+}
+
+@media (max-width: 720px) {
+    .connexion-carte {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+    }
+    .connexion-marque { display: none; }
+    .connexion-panneau { padding: 2.25rem 1.75rem; }
 }
 
 /* ============================================================
