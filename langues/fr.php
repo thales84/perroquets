@@ -10,12 +10,48 @@ return [
     'nav_cacatoes'         => 'Cacatoès',
     'nav_langue'           => 'EN',
 
-    // Page accueil
+    // Page accueil — héros
     'accueil_heros_titre'       => 'Des perroquets élevés avec passion',
     'accueil_heros_sous_titre'  => 'Découvrez nos oiseaux disponibles, élevés à la main et socialisés dès leur naissance, au cœur du Québec.',
     'accueil_voir_oiseaux'      => 'Voir les oiseaux disponibles',
+    'accueil_notre_elevage'     => 'Notre élevage ↓',
+
+    // Page accueil — statistiques
+    'accueil_stat_disponibles'  => 'oiseaux disponibles',
+    'accueil_stat_especes'      => 'espèces représentées',
+    'accueil_stat_main'         => 'élevés à la main',
+    'accueil_stat_reponse'      => 'délai de réponse',
+
+    // Page accueil — espèces
+    'accueil_especes_titre'     => 'Nos espèces de perroquets',
+    'accueil_especes_sous_titre'=> 'Des compagnons de vie pour chaque famille',
+    'accueil_especes_voir'      => 'Voir les oiseaux',
+
+    // Page accueil — processus
+    'accueil_processus_titre'   => 'Comment ça marche ?',
+    'accueil_etape1_titre'      => 'Choisissez votre oiseau',
+    'accueil_etape1_texte'      => 'Parcourez notre catalogue et trouvez le compagnon qui vous correspond selon l\'espèce, le sexe et votre budget.',
+    'accueil_etape2_titre'      => 'Faites votre demande',
+    'accueil_etape2_texte'      => 'Remplissez le formulaire de réservation en ligne. Zéro engagement — c\'est une simple prise de contact.',
+    'accueil_etape3_titre'      => 'Accueillez votre compagnon',
+    'accueil_etape3_texte'      => 'Nous vous contactons sous 48 h pour organiser la remise en main propre au Québec.',
+
+    // Page accueil — confiance
     'accueil_pourquoi_titre'    => 'Pourquoi choisir Maple Perroquets ?',
     'accueil_pourquoi_texte'    => 'Chaque oiseau est un individu unique, suivi de près depuis sa naissance. Nous privilégions le bien-être animal et la transparence avec les futurs propriétaires.',
+    'accueil_confiance1_titre'  => 'Élevés à la main',
+    'accueil_confiance1_texte'  => 'Chaque oiseau est socialisé dès la naissance. Il connaît la présence humaine et est prêt pour la vie en famille.',
+    'accueil_confiance2_titre'  => 'Suivi vétérinaire',
+    'accueil_confiance2_texte'  => 'Nos oiseaux bénéficient d\'un suivi médical régulier. Vous recevrez le carnet de santé complet à la remise.',
+    'accueil_confiance3_titre'  => 'Alimentation naturelle',
+    'accueil_confiance3_texte'  => 'Fruits frais, légumes et granules de qualité. Nos oiseaux sont nourris sainement pour bien démarrer leur vie.',
+    'accueil_confiance4_titre'  => 'Remise en personne',
+    'accueil_confiance4_texte'  => 'Nous prenons le temps de vous présenter votre oiseau, ses habitudes et ses besoins. Aucune expédition.',
+
+    // Page accueil — CTA final
+    'accueil_cta_titre'         => 'Prêt à accueillir votre compagnon ailé ?',
+    'accueil_cta_texte'         => 'Nos oiseaux partent vite. Consultez dès maintenant ceux qui sont encore disponibles.',
+    'accueil_cta_bouton'        => 'Voir tous les oiseaux disponibles',
 
     // Liste des oiseaux
     'liste_titre'          => 'Oiseaux disponibles',

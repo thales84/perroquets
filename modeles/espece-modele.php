@@ -19,6 +19,24 @@ function listerEspeces(): array
 }
 
 /**
+ * Retourne les espèces avec le nombre d'oiseaux DISPONIBLES (pour la page d'accueil).
+ */
+function recupererEspecesAvecNbDisponibles(): array
+{
+    $pdo = obtenirConnexion();
+    $req = $pdo->query("
+        SELECT e.id_espece, e.nom_commun_fr, e.nom_scientifique, e.slug_fr,
+               e.description_fr,
+               COUNT(o.id_oiseau) AS nb_disponibles
+        FROM espece e
+        LEFT JOIN oiseau o ON o.id_espece = e.id_espece AND o.statut = 'disponible'
+        GROUP BY e.id_espece
+        ORDER BY nb_disponibles DESC, e.nom_commun_fr ASC
+    ");
+    return $req->fetchAll();
+}
+
+/**
  * Retourne une espèce par son ID.
  */
 function recupererEspece(int $id): ?array
