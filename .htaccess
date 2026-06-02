@@ -50,6 +50,26 @@ RewriteRule ^fr/confirmation/?$ index.php?page=confirmation&langue=fr [QSA,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^fr/inscription/?$ index.php?page=inscription&langue=fr [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^fr/connexion/?$ index.php?page=connexion&langue=fr [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^fr/deconnexion/?$ index.php?page=deconnexion&langue=fr [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^fr/mon-compte/?$ index.php?page=compte&langue=fr [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^fr/suivi/?$ index.php?page=suivi&langue=fr [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^fr/?$ index.php?page=accueil&langue=fr [QSA,L]
 
 # ------------------------------------------------------------

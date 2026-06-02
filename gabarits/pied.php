@@ -1,41 +1,49 @@
-<?php
-// Pied de page commun — inclus à la fin de chaque page publique.
-$langue = langueActive();
-?>
+<?php $langue = langueActive(); ?>
 </main>
 
-<footer class="pied-site">
-    <div class="pied-interieur">
-        <div class="pied-section">
-            <p class="pied-logo">🦜 Maple Perroquets</p>
-            <p><?= echapper(t('pied_slogan')) ?></p>
-            <p><?= echapper(t('pied_slogan2')) ?></p>
+<!-- ============================================================
+     Footer
+     ============================================================ -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div>
+            <span class="footer-logo">🦜 Maple Perroquets</span>
+            <p class="footer-pitch">
+                Éleveur passionné au Québec. Nos perroquets sont élevés à la main
+                avec amour et expertise depuis plus de 10&nbsp;ans.
+            </p>
         </div>
-
-        <div class="pied-section">
-            <h3><?= echapper(t('pied_contact')) ?></h3>
-            <address>
-                <p>Québec, Canada</p>
-                <p><a href="mailto:info@mapleperroquets.com">info@mapleperroquets.com</a></p>
-            </address>
-        </div>
-
-        <div class="pied-section">
-            <h3><?= echapper(t('pied_navigation')) ?></h3>
+        <div class="footer-col">
+            <div class="footer-col-titre">Espèces</div>
             <ul>
-                <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/"><?= echapper(t('nav_accueil')) ?></a></li>
-                <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux"><?= echapper(t('nav_oiseaux')) ?></a></li>
+                <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux">Aras</a></li>
+                <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux">Gris du Gabon</a></li>
+                <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux">Cacatoès</a></li>
+                <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux">Éclectus</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <div class="footer-col-titre">Aide</div>
+            <ul>
+                <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/">Comment ça marche</a></li>
+                <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/">Préparer l'accueil</a></li>
+                <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux">Voir les oiseaux</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <div class="footer-col-titre">Contact</div>
+            <ul>
+                <li><a href="mailto:bonjour@mapleperroquets.com">bonjour@mapleperroquets.com</a></li>
+                <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux">Québec, Canada 🍁</a></li>
             </ul>
         </div>
     </div>
-
-    <div class="pied-bas">
-        <p>&copy; <?= date('Y') ?> Maple Perroquets. <?= echapper(t('pied_droits')) ?></p>
-        <p><?= echapper(t('pied_prix_cad')) ?></p>
+    <div class="footer-bas">
+        <span>&copy; <?= date('Y') ?> Maple Perroquets — Tous droits réservés.</span>
+        <span>Élevage déclaré · Conforme à la réglementation canadienne sur la faune</span>
     </div>
 </footer>
 
-<script src="<?= echapper(URL_SITE) ?>/ressources/js/theme.js"></script>
-<script src="<?= echapper(URL_SITE) ?>/ressources/js/menu-mobile.js"></script>
+<script src="<?= echapper(URL_SITE) ?>/assets/js/main.js"></script>
 </body>
 </html>

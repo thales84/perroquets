@@ -25,8 +25,13 @@ require_once __DIR__ . '/inc/entete-admin.php';
 ?>
 
 <div class="admin-conteneur">
-    <h1>Tableau de bord</h1>
-    <p class="texte-discret">Bienvenue, <?= echapper($_SESSION['admin_identifiant'] ?? 'Admin') ?></p>
+    <div class="admin-entete-page">
+        <div>
+            <h1>Tableau de bord</h1>
+            <p class="texte-discret">Bienvenue, <?= echapper($_SESSION['admin_identifiant'] ?? 'Admin') ?> 👋</p>
+        </div>
+        <a href="<?= echapper(URL_SITE) ?>/admin/oiseaux/ajouter.php" class="bouton bouton-primaire">+ Ajouter un oiseau</a>
+    </div>
 
     <div class="dashboard-grille">
 
@@ -50,7 +55,7 @@ require_once __DIR__ . '/inc/entete-admin.php';
             <p class="dashboard-label">
                 Nouvelles demandes
                 <?php if ($nouvellesReservations > 0) : ?>
-                    <a href="<?= echapper(URL_SITE) ?>/admin/reservations.php" class="dashboard-lien">Voir →</a>
+                    <a href="<?= echapper(URL_SITE) ?>/admin/reservations/liste.php" class="dashboard-lien">Voir →</a>
                 <?php endif; ?>
             </p>
         </div>

@@ -1,21 +1,20 @@
 <?php
-$titrePage       = t('resa_confirmation');
+$titrePage       = 'Demande envoyée — Merci !';
 $descriptionPage = t('resa_confirmation');
+$langue          = langueActive();
 
 require_once __DIR__ . '/../gabarits/entete.php';
-$langue = langueActive();
 ?>
 
-<div class="conteneur texte-centre">
-    <div class="confirmation">
-        <p class="confirmation__icone" aria-hidden="true">✅</p>
-        <h1><?= echapper(t('resa_confirmation')) ?></h1>
-        <p>Nous avons bien reçu votre demande et vous répondrons dans les 48 heures.</p>
-        <a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux"
-           class="bouton bouton-primaire marge-bas-1">
-            <?= echapper(t('nav_oiseaux')) ?>
-        </a>
-    </div>
+<div class="page-confirmation">
+    <div class="confirmation-icone" aria-hidden="true">✅</div>
+    <h1 class="confirmation-titre">Votre demande a été envoyée !</h1>
+    <p class="confirmation-texte">
+        Nous avons bien reçu votre demande de réservation. Nous vous répondrons
+        sous 48&nbsp;h pour organiser la suite, sans aucun paiement précipité.
+    </p>
+    <a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux"
+       class="btn btn-jungle btn-lg">Voir les autres oiseaux</a>
 </div>
 
 <?php require_once __DIR__ . '/../gabarits/pied.php'; ?>

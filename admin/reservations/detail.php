@@ -26,6 +26,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifierJetonCsrf($_POST['csrf_toke
         header('Location: ' . URL_SITE . '/admin/reservations/detail.php?id=' . $id . '&succes=1');
         exit;
     }
+
+    if ($action === 'suivi') {
+        mettreAJourSuivi($id, [
+            'statut_livraison' => $_POST['statut_livraison'] ?? '',
+            'numero_suivi'     => $_POST['numero_suivi']     ?? '',
+            'transporteur'     => $_POST['transporteur']     ?? '',
+            'date_expedition'  => $_POST['date_expedition']  ?? '',
+        ]);
+        header('Location: ' . URL_SITE . '/admin/reservations/detail.php?id=' . $id . '&succes=1');
+        exit;
+    }
+
+    if ($action === 'generer_code') {
+        assignerCodeSuivi($id);
+        header('Location: ' . URL_SITE . '/admin/reservations/detail.php?id=' . $id . '&succes=code');
+        exit;
+    }
 }
 
 // Recharger après action
@@ -43,7 +60,9 @@ require_once dirname(__DIR__) . '/inc/entete-admin.php';
     </div>
 
     <?php if (isset($_GET['succes'])) : ?>
-        <div class="alerte alerte--succes">Statut mis à jour.</div>
+        <div class="alerte alerte--succes">
+            <?= $_GET['succes'] === 'code' ? '🔐 Nouveau code de suivi généré.' : 'Statut mis à jour.' ?>
+        </div>
     <?php endif; ?>
 
     <div class="detail-grille">
@@ -148,6 +167,88 @@ require_once dirname(__DIR__) . '/inc/entete-admin.php';
                             <?php endforeach; ?>
                         </select>
                         <button type="submit" class="bouton bouton-secondaire bouton-sm">Appliquer</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Code de suivi sécurisé -->
+            <div class="action-bloc">
+                <h3>🔐 Code de suivi client</h3>
+                <p class="texte-discret" style="font-size:.85rem;margin-bottom:.75rem;">
+                    Dossier interne : <strong><?= echapper(genererReference($id)) ?></strong>.
+                    Le code public ci-dessous est <strong>aléatoire</strong> — impossible à deviner.
+                    Communiquez-le au client pour qu'il suive sa commande sur la page publique.
+                </p>
+
+                <?php $codeSuivi = $resa['code_suivi'] ?? null; ?>
+                <?php if ($codeSuivi): ?>
+                <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;background:var(--couleur-fond-alt);border:1px solid var(--couleur-bordure);border-radius:var(--rayon-bordure);padding:.85rem 1rem;margin-bottom:.75rem;">
+                    <code style="font-size:1.2rem;font-weight:700;letter-spacing:.08em;color:var(--couleur-primaire);"><?= echapper($codeSuivi) ?></code>
+                    <a href="<?= echapper(URL_SITE) ?>/fr/suivi?code=<?= echapper($codeSuivi) ?>"
+                       target="_blank" rel="noopener" class="bouton bouton-contour bouton-sm">Tester ↗</a>
+                </div>
+                <form method="post" action="<?= echapper(URL_SITE) ?>/admin/reservations/detail.php?id=<?= $id ?>" style="margin-bottom:1.25rem;"
+                      onsubmit="return confirm('Régénérer le code ? L\'ancien code ne fonctionnera plus.');">
+                    <input type="hidden" name="csrf_token" value="<?= echapper($csrf) ?>">
+                    <input type="hidden" name="action" value="generer_code">
+                    <button type="submit" class="bouton bouton-contour bouton-sm">🔄 Régénérer le code</button>
+                </form>
+                <?php else: ?>
+                <form method="post" action="<?= echapper(URL_SITE) ?>/admin/reservations/detail.php?id=<?= $id ?>" style="margin-bottom:1.25rem;">
+                    <input type="hidden" name="csrf_token" value="<?= echapper($csrf) ?>">
+                    <input type="hidden" name="action" value="generer_code">
+                    <button type="submit" class="bouton bouton-primaire bouton-sm">🔐 Générer un code de suivi</button>
+                </form>
+                <?php endif; ?>
+            </div>
+
+            <!-- Suivi de remise -->
+            <div class="action-bloc">
+                <h3>📦 Suivi de remise</h3>
+                <p class="texte-discret" style="font-size:.85rem;margin-bottom:.75rem;">
+                    Détails affichés au client une fois le code de suivi généré.
+                </p>
+                <form method="post" action="<?= echapper(URL_SITE) ?>/admin/reservations/detail.php?id=<?= $id ?>">
+                    <input type="hidden" name="csrf_token" value="<?= echapper($csrf) ?>">
+                    <input type="hidden" name="action" value="suivi">
+
+                    <div class="formulaire-admin" style="max-width:100%;">
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem 1rem;">
+                            <div>
+                                <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.3rem;">Statut de livraison</label>
+                                <select name="statut_livraison" style="width:100%;padding:.4rem .6rem;border:1px solid var(--couleur-bordure);border-radius:var(--rayon-bordure);background:var(--couleur-fond);">
+                                    <option value="">— Non défini —</option>
+                                    <option value="en_preparation" <?= ($resa['statut_livraison'] ?? '') === 'en_preparation' ? 'selected' : '' ?>>En préparation</option>
+                                    <option value="expedie"        <?= ($resa['statut_livraison'] ?? '') === 'expedie'        ? 'selected' : '' ?>>Expédié</option>
+                                    <option value="livre"          <?= ($resa['statut_livraison'] ?? '') === 'livre'          ? 'selected' : '' ?>>Remis à l'adoptant</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.3rem;">Date d'expédition</label>
+                                <input type="date" name="date_expedition"
+                                       value="<?= echapper($resa['date_expedition'] ?? '') ?>"
+                                       style="width:100%;padding:.4rem .6rem;border:1px solid var(--couleur-bordure);border-radius:var(--rayon-bordure);background:var(--couleur-fond);">
+                            </div>
+                            <div>
+                                <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.3rem;">Transporteur</label>
+                                <select name="transporteur" style="width:100%;padding:.4rem .6rem;border:1px solid var(--couleur-bordure);border-radius:var(--rayon-bordure);background:var(--couleur-fond);">
+                                    <option value="">— Non défini —</option>
+                                    <?php foreach (['Remise en main propre','Canada Post','Purolator','FedEx','UPS','Autre'] as $t): ?>
+                                    <option value="<?= echapper($t) ?>" <?= ($resa['transporteur'] ?? '') === $t ? 'selected' : '' ?>><?= echapper($t) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:.3rem;">N° de suivi transporteur</label>
+                                <input type="text" name="numero_suivi"
+                                       value="<?= echapper($resa['numero_suivi'] ?? '') ?>"
+                                       placeholder="ex: 1234567890"
+                                       style="width:100%;padding:.4rem .6rem;border:1px solid var(--couleur-bordure);border-radius:var(--rayon-bordure);background:var(--couleur-fond);">
+                            </div>
+                        </div>
+                        <button type="submit" class="bouton bouton-primaire bouton-sm" style="margin-top:.75rem;">
+                            Mettre à jour le suivi
+                        </button>
                     </div>
                 </form>
             </div>
