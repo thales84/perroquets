@@ -38,13 +38,13 @@ jobs:
           fi
 
   # ----------------------------------------------------------
-  # Déploiement continu : déclenche le "pull" Git côté Hostinger.
-  # Hostinger tire le dépôt (sortant) — aucune connexion entrante à
-  # filtrer, contrairement à SSH/FTP que Hostinger bloque depuis les
-  # IP de datacenters. Le webhook est appelé en HTTPS (port 443).
+  # Déploiement continu : rsync over SSH (natif, hors Docker) vers
+  # Hostinger (port 65002). Pas de --delete → config.php / medias /
+  # fichiers hors dépôt jamais supprimés. Les --exclude les protègent
+  # aussi de tout transfert.
   # ----------------------------------------------------------
   deploy:
-    name: Déploiement Git Hostinger (prod)
+    name: Déploiement rsync/SSH (prod)
     needs: lint
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
@@ -52,12 +52,41 @@ jobs:
       group: deploy-prod
       cancel-in-progress: true
     steps:
-      - name: Déclencher le déploiement Hostinger (webhook)
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Charger la clé SSH dans l'agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Diagnostic connexion SSH
+        env:
+          H: ${{ secrets.SSH_HOST }}
+          P: ${{ secrets.SSH_PORT }}
         run: |
-          code=$(curl -s -o /dev/null -w '%{http_code}' -X POST "${{ secrets.HOSTINGER_DEPLOY_HOOK }}")
-          echo "Réponse webhook Hostinger : HTTP $code"
-          # Hostinger renvoie 200 (ou 2xx) quand le pull est accepté.
-          case "$code" in
-            2*) echo "Déploiement déclenché." ;;
-            *)  echo "::error::Webhook Hostinger a répondu HTTP $code"; exit 1 ;;
-          esac
+          echo "Test d'accès TCP vers $H:$P ..."
+          timeout 30 bash -c "cat < /dev/null > /dev/tcp/$H/$P" \
+            && echo "Port joignable." \
+            || { echo "::error::Impossible de joindre $H:$P (bloqué/filtré ou secret invalide)"; exit 1; }
+
+      - name: Déployer via rsync
+        env:
+          H: ${{ secrets.SSH_HOST }}
+          P: ${{ secrets.SSH_PORT }}
+          U: ${{ secrets.SSH_USER }}
+          R: ${{ secrets.SSH_REMOTE_PATH }}
+        run: |
+          rsync -avz --no-perms --no-times \
+            -e "ssh -p $P -o StrictHostKeyChecking=no -o ConnectTimeout=30" \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='docs/' \
+            --exclude='base-de-donnees/' \
+            --exclude='configuration/config.php' \
+            --exclude='medias/' \
+            --exclude='*.md' \
+            --exclude='fix-admin-hash.php' \
+            --exclude='debloquer-admin.php' \
+            --exclude='generer-hash-admin.php' \
+            ./ "$U@$H:$R"
