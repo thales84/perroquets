@@ -2,11 +2,17 @@
 # Projet : mapleperroquets.com
 # Réécriture d'URL Apache — mod_rewrite requis
 # ============================================================
+# Fichier AGNOSTIQUE local <-> production :
+#  - Toutes les substitutions sont relatives (fr/, index.php, admin/...),
+#    donc aucune RewriteBase n'est nécessaire : fonctionne à la racine
+#    (prod : https://mapleperroquets.com) comme en sous-dossier
+#    (local XAMPP : http://localhost/perroquets/).
+#  - Le forçage HTTPS ne s'applique qu'au domaine de production,
+#    le développement local en http reste donc intact.
+# ============================================================
 
 Options -Indexes
 RewriteEngine On
-# Sous-dossier local : /perroquets/ — à supprimer en production (site à la racine)
-RewriteBase /perroquets/
 
 # ------------------------------------------------------------
 # Protection des dossiers sensibles (403)
@@ -14,10 +20,11 @@ RewriteBase /perroquets/
 RewriteRule ^(configuration|base-de-donnees|modeles)(/.*)?$ - [F,L]
 
 # ------------------------------------------------------------
-# Forcer HTTPS (décommenter en production)
+# Forcer HTTPS — uniquement sur le domaine de production
 # ------------------------------------------------------------
-# RewriteCond %{HTTPS} off
-# RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+RewriteCond %{HTTP_HOST} (^|\.)mapleperroquets\.com$ [NC]
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 # ------------------------------------------------------------
 # Redirection racine vers /fr/

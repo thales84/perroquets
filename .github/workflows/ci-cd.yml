@@ -1,0 +1,76 @@
+name: CI/CD
+
+# CI à chaque push et PR ; déploiement FTP automatique uniquement sur push vers main.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ----------------------------------------------------------
+  # Intégration continue : validation de la syntaxe PHP
+  # ----------------------------------------------------------
+  lint:
+    name: Lint PHP
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: Vérifier la syntaxe de tous les fichiers PHP (php -l)
+        run: |
+          find . -type f -name '*.php' -not -path './.git/*' -print0 \
+            | xargs -0 -n1 -P4 php -l
+
+      - name: Refuser un config.php committé par erreur
+        run: |
+          if git ls-files --error-unmatch configuration/config.php >/dev/null 2>&1; then
+            echo "::error::configuration/config.php ne doit jamais être committé (secrets)."
+            exit 1
+          fi
+
+  # ----------------------------------------------------------
+  # Déploiement continu : envoi FTP vers l'hébergement mutualisé
+  # ----------------------------------------------------------
+  deploy:
+    name: Déploiement FTP (prod)
+    needs: lint
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-prod
+      cancel-in-progress: true
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Déployer via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          # Dossier racine web sur le serveur (ex. public_html/ sur cPanel).
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          # Fichiers/dossiers jamais envoyés en production.
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            configuration/config.php
+            docs/**
+            base-de-donnees/**
+            **/*.md
+            CLAUDE.md
+            fix-admin-hash.php
+            debloquer-admin.php
+            generer-hash-admin.php
