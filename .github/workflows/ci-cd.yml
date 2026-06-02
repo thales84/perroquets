@@ -30,12 +30,14 @@ jobs:
           find . -type f -name '*.php' -not -path './.git/*' -print0 \
             | xargs -0 -n1 -P4 php -l
 
-      - name: Refuser un config.php committé par erreur
+      - name: Refuser un fichier de config avec secrets committé par erreur
         run: |
-          if git ls-files --error-unmatch configuration/config.php >/dev/null 2>&1; then
-            echo "::error::configuration/config.php ne doit jamais être committé (secrets)."
-            exit 1
-          fi
+          for f in configuration/config.php configuration/config-prod.php; do
+            if git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
+              echo "::error::$f ne doit jamais être committé (secrets)."
+              exit 1
+            fi
+          done
 
   # ----------------------------------------------------------
   # Déploiement continu : rsync over SSH (natif, hors Docker) vers
@@ -84,6 +86,7 @@ jobs:
             --exclude='docs/' \
             --exclude='base-de-donnees/' \
             --exclude='configuration/config.php' \
+            --exclude='configuration/config-prod.php' \
             --exclude='medias/' \
             --exclude='*.md' \
             --exclude='fix-admin-hash.php' \
