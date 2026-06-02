@@ -71,103 +71,310 @@ if ($bloque) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="fr-CA" data-theme="clair">
+<html lang="fr-CA">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion — Admin Maple Perroquets</title>
-    <meta name="robots" content="noindex, nofollow">
-    <script>
-        (function () {
-            var t = localStorage.getItem('theme');
-            if (t) document.documentElement.setAttribute('data-theme', t);
-        })();
-    </script>
-    <link rel="stylesheet" href="<?= echapper(URL_SITE) ?>/ressources/css/style.css">
-    <link rel="stylesheet" href="<?= echapper(URL_SITE) ?>/ressources/css/admin.css">
-</head>
-<body class="page-connexion">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexion — Admin Maple Perroquets</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+/* ============================================================
+   Page de connexion admin — styles autonomes (aucune dépendance)
+   ============================================================ */
+:root {
+    --lg-fond1:   #f0eade;
+    --lg-fond2:   #e7ddcd;
+    --lg-carte:   #ffffff;
+    --lg-texte:   #1f2420;
+    --lg-discret: #6b7268;
+    --lg-bordure: #e0d8c9;
+    --lg-champ:   #f7f4ee;
+    --lg-vert:    #2d7a4f;
+    --lg-vert-fonce: #1f5638;
+    --lg-vert-clair: #3a945f;
+    --lg-ambre:   #e07b39;
+    --lg-erreur-fond: #fbe9e7;
+    --lg-erreur-txt:  #b3261e;
+    --lg-erreur-bord: #f3c5bf;
+    --lg-ombre:   0 20px 50px -18px rgba(31, 86, 56, 0.45);
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="clair"]) {
+        --lg-fond1:   #141a16;
+        --lg-fond2:   #0e1310;
+        --lg-carte:   #1c241e;
+        --lg-texte:   #e8ede9;
+        --lg-discret: #9aaa9c;
+        --lg-bordure: #2f3a31;
+        --lg-champ:   #232d26;
+        --lg-vert:    #5ab87f;
+        --lg-vert-fonce: #3a945f;
+        --lg-vert-clair: #7acf98;
+        --lg-ambre:   #f09a5a;
+        --lg-erreur-fond: #3a201d;
+        --lg-erreur-txt:  #f3b0a8;
+        --lg-erreur-bord: #5e2f2a;
+        --lg-ombre:   0 20px 50px -18px rgba(0, 0, 0, 0.6);
+    }
+}
+[data-theme="sombre"] {
+    --lg-fond1:   #141a16;
+    --lg-fond2:   #0e1310;
+    --lg-carte:   #1c241e;
+    --lg-texte:   #e8ede9;
+    --lg-discret: #9aaa9c;
+    --lg-bordure: #2f3a31;
+    --lg-champ:   #232d26;
+    --lg-vert:    #5ab87f;
+    --lg-vert-fonce: #3a945f;
+    --lg-vert-clair: #7acf98;
+    --lg-ambre:   #f09a5a;
+    --lg-erreur-fond: #3a201d;
+    --lg-erreur-txt:  #f3b0a8;
+    --lg-erreur-bord: #5e2f2a;
+    --lg-ombre:   0 20px 50px -18px rgba(0, 0, 0, 0.6);
+}
 
-<button class="bouton-theme connexion-theme" id="bouton-theme" type="button" aria-label="Basculer le thème">
-    <span class="icone-theme" aria-hidden="true">☀️</span>
-</button>
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body.lg-body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: var(--lg-texte);
+    background:
+        radial-gradient(900px 500px at 85% -10%, color-mix(in srgb, var(--lg-vert) 22%, transparent), transparent 60%),
+        radial-gradient(700px 450px at 0% 110%, color-mix(in srgb, var(--lg-ambre) 18%, transparent), transparent 60%),
+        linear-gradient(160deg, var(--lg-fond1), var(--lg-fond2));
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
 
-<main id="contenu-principal" class="connexion-page">
-    <div class="connexion-carte">
+.lg-theme {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    border: 1px solid var(--lg-bordure);
+    background: var(--lg-carte);
+    color: var(--lg-texte);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: transform 0.15s;
+}
+.lg-theme:hover { transform: rotate(20deg); }
 
-        <aside class="connexion-marque">
-            <div class="connexion-marque-fond"></div>
-            <div class="connexion-marque-contenu">
-                <div class="connexion-logo" aria-hidden="true">🦜</div>
-                <h2>Maple Perroquets</h2>
-                <p>Console d’administration</p>
-                <ul class="connexion-atouts">
-                    <li>🦜 Gestion des oiseaux &amp; espèces</li>
-                    <li>📋 Suivi des réservations</li>
-                    <li>🔒 Accès sécurisé et chiffré</li>
-                </ul>
-            </div>
-        </aside>
+.lg-carte {
+    width: 100%;
+    max-width: 410px;
+    background: var(--lg-carte);
+    border: 1px solid var(--lg-bordure);
+    border-radius: 20px;
+    box-shadow: var(--lg-ombre);
+    padding: 2.5rem 2.25rem 2rem;
+    animation: lg-apparition 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes lg-apparition {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
 
-        <section class="connexion-panneau">
-            <header class="connexion-tete">
-                <h1>Connexion</h1>
-                <p class="connexion-sous-titre">Accédez à votre tableau de bord</p>
-            </header>
+.lg-logo {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1.1rem;
+    display: grid;
+    place-items: center;
+    font-size: 1.9rem;
+    border-radius: 16px;
+    color: #fff;
+    background: linear-gradient(140deg, var(--lg-vert-clair), var(--lg-vert-fonce));
+    box-shadow: 0 8px 20px -6px color-mix(in srgb, var(--lg-vert) 60%, transparent);
+}
+.lg-titre {
+    text-align: center;
+    font-size: 1.45rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem;
+}
+.lg-sous-titre {
+    text-align: center;
+    color: var(--lg-discret);
+    font-size: 0.92rem;
+    margin: 0 0 1.6rem;
+}
 
-            <?php if ($erreur) : ?>
-                <div class="alerte alerte--erreur" role="alert"><?= echapper($erreur) ?></div>
-            <?php endif; ?>
+.lg-alerte {
+    background: var(--lg-erreur-fond);
+    color: var(--lg-erreur-txt);
+    border: 1px solid var(--lg-erreur-bord);
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.88rem;
+    margin-bottom: 1.2rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
 
-            <form method="post" action="<?= echapper(URL_SITE) ?>/admin/connexion.php" class="connexion-formulaire" novalidate>
+.lg-champ { margin-bottom: 1.1rem; }
+.lg-champ label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+.lg-saisie {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--lg-champ);
+    border: 1.5px solid var(--lg-bordure);
+    border-radius: 11px;
+    padding: 0 0.85rem;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+.lg-saisie:focus-within {
+    border-color: var(--lg-vert);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--lg-vert) 20%, transparent);
+}
+.lg-saisie .lg-icone { font-size: 1rem; opacity: 0.6; }
+.lg-saisie input {
+    flex: 1;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--lg-texte);
+    font-size: 0.97rem;
+    padding: 0.8rem 0;
+    min-width: 0;
+}
+.lg-saisie input:disabled { opacity: 0.6; cursor: not-allowed; }
+.lg-oeil {
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    opacity: 0.5;
+    padding: 0.2rem;
+    transition: opacity 0.15s;
+}
+.lg-oeil:hover, .lg-oeil.actif { opacity: 1; }
 
-                <div class="champ-icone">
-                    <label for="identifiant">Identifiant</label>
-                    <div class="champ-icone-rangee">
-                        <span class="champ-icone-symbole" aria-hidden="true">👤</span>
-                        <input type="text" id="identifiant" name="identifiant"
-                               autocomplete="username" required
-                               <?= $bloque ? 'disabled' : '' ?>>
-                    </div>
-                </div>
+.lg-bouton {
+    width: 100%;
+    margin-top: 0.4rem;
+    padding: 0.85rem;
+    border: 0;
+    border-radius: 11px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--lg-vert-clair), var(--lg-vert-fonce));
+    transition: filter 0.15s, transform 0.05s;
+}
+.lg-bouton:hover { filter: brightness(1.07); }
+.lg-bouton:active { transform: translateY(1px); }
+.lg-bouton:disabled { opacity: 0.55; cursor: not-allowed; filter: none; }
 
-                <div class="champ-icone">
-                    <label for="mot_de_passe">Mot de passe</label>
-                    <div class="champ-icone-rangee">
-                        <span class="champ-icone-symbole" aria-hidden="true">🔒</span>
-                        <input type="password" id="mot_de_passe" name="mot_de_passe"
-                               autocomplete="current-password" required
-                               <?= $bloque ? 'disabled' : '' ?>>
-                        <button type="button" class="champ-oeil" id="bascule-mdp"
-                                aria-label="Afficher le mot de passe"
-                                <?= $bloque ? 'disabled' : '' ?>>👁️</button>
-                    </div>
-                </div>
-
-                <button type="submit" class="bouton bouton-primaire connexion-soumettre"
-                        <?= $bloque ? 'disabled' : '' ?>>
-                    Se connecter
-                </button>
-
-            </form>
-
-            <p class="connexion-pied">🔒 Réservé au personnel autorisé</p>
-        </section>
-
-    </div>
-</main>
-
-<script src="<?= echapper(URL_SITE) ?>/ressources/js/theme.js"></script>
+.lg-pied {
+    margin: 1.5rem 0 0;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--lg-discret);
+}
+</style>
 <script>
 (function () {
-    var bouton = document.getElementById('bascule-mdp');
-    var champ  = document.getElementById('mot_de_passe');
-    if (!bouton || !champ) return;
+    var t = localStorage.getItem('theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+</head>
+<body class="lg-body">
+
+<button class="lg-theme" id="lg-theme" type="button" aria-label="Basculer le thème clair/sombre">☀️</button>
+
+<main class="lg-carte">
+    <div class="lg-logo" aria-hidden="true">🦜</div>
+    <h1 class="lg-titre">Administration</h1>
+    <p class="lg-sous-titre">Maple Perroquets — accès réservé</p>
+
+    <?php if ($erreur) : ?>
+        <div class="lg-alerte" role="alert"><span aria-hidden="true">⚠️</span><span><?= echapper($erreur) ?></span></div>
+    <?php endif; ?>
+
+    <form method="post" action="<?= echapper(URL_SITE) ?>/admin/connexion.php" novalidate>
+
+        <div class="lg-champ">
+            <label for="identifiant">Identifiant</label>
+            <div class="lg-saisie">
+                <span class="lg-icone" aria-hidden="true">👤</span>
+                <input type="text" id="identifiant" name="identifiant"
+                       autocomplete="username" autofocus required
+                       <?= $bloque ? 'disabled' : '' ?>>
+            </div>
+        </div>
+
+        <div class="lg-champ">
+            <label for="mot_de_passe">Mot de passe</label>
+            <div class="lg-saisie">
+                <span class="lg-icone" aria-hidden="true">🔒</span>
+                <input type="password" id="mot_de_passe" name="mot_de_passe"
+                       autocomplete="current-password" required
+                       <?= $bloque ? 'disabled' : '' ?>>
+                <button type="button" class="lg-oeil" id="lg-oeil"
+                        aria-label="Afficher le mot de passe"
+                        <?= $bloque ? 'disabled' : '' ?>>👁️</button>
+            </div>
+        </div>
+
+        <button type="submit" class="lg-bouton" <?= $bloque ? 'disabled' : '' ?>>
+            Se connecter
+        </button>
+
+    </form>
+
+    <p class="lg-pied">🔒 Connexion sécurisée — personnel autorisé uniquement</p>
+</main>
+
+<script>
+/* Bascule afficher / masquer le mot de passe */
+(function () {
+    var oeil  = document.getElementById('lg-oeil');
+    var champ = document.getElementById('mot_de_passe');
+    if (oeil && champ) {
+        oeil.addEventListener('click', function () {
+            var visible = champ.type === 'password';
+            champ.type = visible ? 'text' : 'password';
+            oeil.classList.toggle('actif', visible);
+            oeil.setAttribute('aria-label', visible ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+        });
+    }
+})();
+
+/* Bascule thème clair / sombre (mémorisé) */
+(function () {
+    var bouton = document.getElementById('lg-theme');
+    if (!bouton) return;
+    function majIcone() {
+        var sombre = document.documentElement.getAttribute('data-theme') === 'sombre';
+        bouton.textContent = sombre ? '🌙' : '☀️';
+    }
+    majIcone();
     bouton.addEventListener('click', function () {
-        var visible = champ.type === 'password';
-        champ.type = visible ? 'text' : 'password';
-        bouton.classList.toggle('actif', visible);
-        bouton.setAttribute('aria-label', visible ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+        var actuel = document.documentElement.getAttribute('data-theme');
+        var prochain = actuel === 'sombre' ? 'clair' : 'sombre';
+        document.documentElement.setAttribute('data-theme', prochain);
+        localStorage.setItem('theme', prochain);
+        majIcone();
     });
 })();
 </script>
