@@ -32,7 +32,7 @@ jobs:
 
       - name: Refuser un fichier de config avec secrets committé par erreur
         run: |
-          for f in configuration/config.php configuration/config-prod.php; do
+          for f in configuration/config-prod.php configuration/config-secret.php; do
             if git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
               echo "::error::$f ne doit jamais être committé (secrets)."
               exit 1
@@ -85,8 +85,8 @@ jobs:
             --exclude='.github/' \
             --exclude='docs/' \
             --exclude='base-de-donnees/' \
-            --exclude='configuration/config.php' \
             --exclude='configuration/config-prod.php' \
+            --exclude='configuration/config-secret.php' \
             --exclude='medias/' \
             --exclude='*.md' \
             --exclude='fix-admin-hash.php' \

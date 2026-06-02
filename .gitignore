@@ -1,5 +1,5 @@
-configuration/config.php
 configuration/config-prod.php
+configuration/config-secret.php
 medias/oiseaux/*
 fix-admin-hash.php
 debloquer-admin.php
