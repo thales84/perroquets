@@ -54,6 +54,11 @@ $prenomClient   = htmlspecialchars($_SESSION['client_prenom'] ?? '', ENT_QUOTES)
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600;1,9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Favicons -->
+    <link rel="icon" href="<?= echapper(URL_SITE) ?>/assets/img/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="<?= echapper(URL_SITE) ?>/assets/img/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="apple-touch-icon" href="<?= echapper(URL_SITE) ?>/assets/img/apple-touch-icon.png">
+
     <!-- Feuille de style principale -->
     <link rel="stylesheet" href="<?= echapper(URL_SITE) ?>/assets/css/style.css">
 

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Maple Perroquets">
+  <defs>
+    <linearGradient id="mp-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2f8f5b"/>
+      <stop offset="1" stop-color="#1f6f44"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#mp-bg)"/>
+  <!-- tête -->
+  <circle cx="30" cy="33" r="16" fill="#2f86e0"/>
+  <!-- huppe -->
+  <path d="M31 17c3-6 8-8 12-5-3 1-6 3-7 8z" fill="#ffc02e"/>
+  <!-- joue claire -->
+  <circle cx="25" cy="37" r="7.5" fill="#ffd24d"/>
+  <!-- bec -->
+  <path d="M44 31c6 0 10 3 10 6.5S50 44 44 44c2-4 2-9 0-13z" fill="#f2902e"/>
+  <path d="M46 34c0 2.5 0 5 0 7 2 0 4-1.4 4-3.5S48 34 46 34z" fill="#c9701c"/>
+  <!-- oeil -->
+  <circle cx="34" cy="28" r="4.4" fill="#ffffff"/>
+  <circle cx="34.6" cy="28" r="2.1" fill="#16110b"/>
+</svg>
