@@ -21,17 +21,32 @@ $fondsEspeces = [
     'gris-du-gabon'          => 'linear-gradient(145deg,#2a2a2a,#555)',
     'ara-ararauna'           => 'linear-gradient(145deg,#0d3d7a,#1565c0)',
     'cacatoes-a-huppe-jaune' => 'linear-gradient(145deg,#5a4a3a,#8a7060)',
+    'eclectus'               => 'linear-gradient(145deg,#0f5132,#198754)',
 ];
 $sousEspeces = [
     'gris-du-gabon'          => 'Le génie de la parole',
     'ara-ararauna'           => 'La star des couleurs',
     'cacatoes-a-huppe-jaune' => 'Le clown câlin',
+    'eclectus'               => 'Le joyau émeraude',
 ];
 $emojisEspeces = [
     'gris-du-gabon'          => '🐦',
     'ara-ararauna'           => '💙',
     'cacatoes-a-huppe-jaune' => '🤍',
+    'eclectus'               => '💚',
 ];
+
+/* Espèces vedettes : l'accueil n'affiche que les espèces phares (curatées)
+   pour ne pas surcharger la page. Le reste se découvre sur la page liste.
+   Repli : si aucune vedette n'est en base, on prend les premières espèces. */
+$slugsVedettes = ['gris-du-gabon', 'ara-ararauna', 'cacatoes-a-huppe-jaune', 'eclectus'];
+$especesVedettes = array_values(array_filter(
+    $especes,
+    fn($e) => in_array($e['slug_fr'] ?? '', $slugsVedettes, true)
+));
+if (!$especesVedettes) {
+    $especesVedettes = array_slice($especes, 0, 4);
+}
 
 require_once __DIR__ . '/../gabarits/entete.php';
 ?>
@@ -122,7 +137,7 @@ require_once __DIR__ . '/../gabarits/entete.php';
     <h2 class="s-titre reveal">Trouvez l'oiseau qui vous <em>ressemble</em></h2>
     <p class="s-sous reveal">Chaque espèce a sa propre personnalité. Laquelle correspond à votre mode de vie&nbsp;?</p>
     <div class="especes-grille">
-        <?php foreach ($especes as $i => $e):
+        <?php foreach ($especesVedettes as $i => $e):
             $slug   = $e['slug_fr'] ?? '';
             $photo  = $photosEspeces[$slug] ?? null;
             $fond   = $fondsEspeces[$slug]  ?? 'linear-gradient(145deg, var(--jungle-fonce), var(--turquoise))';
@@ -152,6 +167,12 @@ require_once __DIR__ . '/../gabarits/entete.php';
         </a>
         <?php endforeach; ?>
     </div>
+    <?php if (count($especes) > count($especesVedettes)): ?>
+    <div class="especes-cta reveal">
+        <a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux"
+           class="btn btn-ghost btn-lg">Voir toutes les espèces (<?= count($especes) ?>)&nbsp;→</a>
+    </div>
+    <?php endif; ?>
 </section>
 <?php endif; ?>
 

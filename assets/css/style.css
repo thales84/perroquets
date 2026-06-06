@@ -502,6 +502,7 @@ address { font-style: normal; }
     display: grid; grid-template-columns: repeat(2,1fr); gap: 1.25rem;
 }
 @media (min-width: 700px) { .especes-grille { grid-template-columns: repeat(4,1fr); } }
+.especes-cta { margin-top: 2rem; text-align: center; }
 .carte-esp {
     position: relative; border-radius: var(--rayon); overflow: hidden;
     aspect-ratio: 3/4; display: block; cursor: pointer;
