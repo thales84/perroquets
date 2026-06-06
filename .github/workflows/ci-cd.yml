@@ -62,34 +62,53 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Diagnostic connexion SSH
+      - name: Diagnostic connexion SSH (informatif, non bloquant)
+        continue-on-error: true
         env:
           H: ${{ secrets.SSH_HOST }}
           P: ${{ secrets.SSH_PORT }}
         run: |
           echo "Test d'accès TCP vers $H:$P ..."
-          timeout 30 bash -c "cat < /dev/null > /dev/tcp/$H/$P" \
-            && echo "Port joignable." \
-            || { echo "::error::Impossible de joindre $H:$P (bloqué/filtré ou secret invalide)"; exit 1; }
+          # Sonde indicative seulement : /dev/tcp peut être filtré alors que
+          # le vrai SSH passe. On ne bloque PAS le déploiement là-dessus.
+          if timeout 20 bash -c "cat < /dev/null > /dev/tcp/$H/$P" 2>/dev/null; then
+            echo "Port joignable."
+          else
+            echo "::warning::Sonde TCP $H:$P KO (peut être filtrée). On tente rsync quand même."
+          fi
 
-      - name: Déployer via rsync
+      - name: Déployer via rsync (avec tentatives)
         env:
           H: ${{ secrets.SSH_HOST }}
           P: ${{ secrets.SSH_PORT }}
           U: ${{ secrets.SSH_USER }}
           R: ${{ secrets.SSH_REMOTE_PATH }}
         run: |
-          rsync -avz --no-perms --no-times \
-            -e "ssh -p $P -o StrictHostKeyChecking=no -o ConnectTimeout=30" \
-            --exclude='.git/' \
-            --exclude='.github/' \
-            --exclude='docs/' \
-            --exclude='base-de-donnees/' \
-            --exclude='configuration/config-prod.php' \
-            --exclude='configuration/config-secret.php' \
-            --exclude='medias/' \
-            --exclude='*.md' \
-            --exclude='fix-admin-hash.php' \
-            --exclude='debloquer-admin.php' \
-            --exclude='generer-hash-admin.php' \
-            ./ "$U@$H:$R"
+          deployer() {
+            rsync -avz --no-perms --no-times \
+              -e "ssh -p $P -o StrictHostKeyChecking=no -o ConnectTimeout=30" \
+              --exclude='.git/' \
+              --exclude='.github/' \
+              --exclude='docs/' \
+              --exclude='base-de-donnees/' \
+              --exclude='configuration/config-prod.php' \
+              --exclude='configuration/config-secret.php' \
+              --exclude='medias/' \
+              --exclude='*.md' \
+              --exclude='fix-admin-hash.php' \
+              --exclude='debloquer-admin.php' \
+              --exclude='generer-hash-admin.php' \
+              ./ "$U@$H:$R"
+          }
+          # Jusqu'à 3 tentatives pour absorber un blocage transitoire de l'IP runner.
+          for essai in 1 2 3; do
+            echo "Tentative de déploiement $essai/3..."
+            if deployer; then
+              echo "Déploiement réussi."
+              exit 0
+            fi
+            echo "Échec tentative $essai. Nouvelle tentative dans 15 s..."
+            sleep 15
+          done
+          echo "::error::Déploiement rsync échoué après 3 tentatives."
+          exit 1
