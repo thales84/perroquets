@@ -873,6 +873,15 @@
     margin-bottom: 0.5rem;
 }
 .param-vedettes .champ-bascule { font-weight: 500; }
+.hero-apercu {
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon-bordure);
+    overflow: hidden;
+    max-width: 320px;
+    background: var(--couleur-fond-alt);
+}
+.hero-apercu img { display: block; width: 100%; height: auto; }
 
 /* ------------------------------------------------------------
    Paramètres — barre d'onglets

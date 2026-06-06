@@ -47,10 +47,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $vedettesPostees = array_values(array_intersect($vedettesPostees, $slugsValides));
         $valeurs['accueil_vedettes_slugs'] = implode(',', $vedettesPostees);
 
-        enregistrerParametres($valeurs);
-        // PRG : redirige pour recharger les valeurs fraîches.
-        header('Location: ' . URL_SITE . '/admin/parametres.php?succes=1');
-        exit;
+        // Image du héros : upload optionnel. Si un fichier valide est fourni,
+        // il est déplacé dans /medias/site/ et son chemin écrase le champ texte.
+        if (!empty($_FILES['hero_image_fichier']['tmp_name'])) {
+            $f          = $_FILES['hero_image_fichier'];
+            $typesOk    = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+            $tailleMax  = 5 * 1024 * 1024; // 5 Mo
+
+            if ($f['error'] !== UPLOAD_ERR_OK) {
+                $erreur = "Échec du téléversement de l'image (code {$f['error']}).";
+            } elseif ($f['size'] > $tailleMax) {
+                $erreur = 'Image trop volumineuse (max 5 Mo).';
+            } else {
+                $finfo = new finfo(FILEINFO_MIME_TYPE);
+                $mime  = $finfo->file($f['tmp_name']);
+                if (!isset($typesOk[$mime])) {
+                    $erreur = 'Type non autorisé (jpg, png ou webp uniquement).';
+                } else {
+                    $dossier = $_SERVER['DOCUMENT_ROOT'] . '/medias/site/';
+                    if (!is_dir($dossier)) {
+                        @mkdir($dossier, 0755, true);
+                    }
+                    $nom  = uniqid('hero-', true) . '.' . $typesOk[$mime];
+                    if (move_uploaded_file($f['tmp_name'], $dossier . $nom)) {
+                        $valeurs['accueil_hero_image'] = '/medias/site/' . $nom;
+                    } else {
+                        $erreur = "Impossible d'enregistrer l'image sur le serveur.";
+                    }
+                }
+            }
+        }
+
+        if ($erreur === '') {
+            enregistrerParametres($valeurs);
+            // PRG : redirige pour recharger les valeurs fraîches.
+            header('Location: ' . URL_SITE . '/admin/parametres.php?succes=1');
+            exit;
+        }
     }
 }
 
@@ -74,7 +107,7 @@ require_once __DIR__ . '/inc/entete-admin.php';
         <div class="alerte alerte--erreur" role="alert"><?= echapper($erreur) ?></div>
     <?php endif; ?>
 
-    <form method="post" action="<?= echapper(URL_SITE) ?>/admin/parametres.php" class="formulaire-admin">
+    <form method="post" action="<?= echapper(URL_SITE) ?>/admin/parametres.php" class="formulaire-admin" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="<?= echapper(genererJetonCsrf()) ?>">
 
         <!-- Barre d'onglets -->
@@ -147,9 +180,27 @@ require_once __DIR__ . '/inc/entete-admin.php';
             </div>
 
             <div class="champ">
-                <label for="accueil_hero_image">Image du héros (chemin ou URL)</label>
+                <label>Image du héros</label>
+                <?php
+                    $heroImgActuel = param('accueil_hero_image', 'assets/img/hero-perroquet.jpg');
+                    $heroImgApercu = preg_match('#^https?://#i', $heroImgActuel)
+                        ? $heroImgActuel
+                        : URL_SITE . '/' . ltrim($heroImgActuel, '/');
+                ?>
+                <div class="hero-apercu">
+                    <img src="<?= echapper($heroImgApercu) ?>" alt="Aperçu de l'image du héros"
+                         loading="lazy" onerror="this.style.display='none'">
+                </div>
+                <label for="hero_image_fichier" class="texte-discret">Téléverser une nouvelle image (jpg, png, webp — 5 Mo max)</label>
+                <input type="file" id="hero_image_fichier" name="hero_image_fichier"
+                       accept="image/jpeg,image/png,image/webp">
+                <small class="texte-discret">L'image téléversée remplace l'actuelle après enregistrement.</small>
+            </div>
+
+            <div class="champ">
+                <label for="accueil_hero_image">…ou indiquer un chemin / une URL</label>
                 <input type="text" id="accueil_hero_image" name="accueil_hero_image" value="<?= $val('accueil_hero_image') ?>" placeholder="assets/img/hero-perroquet.jpg" maxlength="255">
-                <small class="texte-discret">Chemin relatif (ex. <code>assets/img/hero-perroquet.jpg</code>) ou URL absolue. Vide = image par défaut.</small>
+                <small class="texte-discret">Chemin relatif (ex. <code>assets/img/hero-perroquet.jpg</code>) ou URL absolue. Ignoré si vous téléversez un fichier ci-dessus. Vide = image par défaut.</small>
             </div>
 
             <h3 class="param-sous-titre">Espèces vedettes</h3>
