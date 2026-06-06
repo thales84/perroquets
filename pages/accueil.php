@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../modeles/espece-modele.php';
 require_once __DIR__ . '/../modeles/oiseau-modele.php';
+require_once __DIR__ . '/../modeles/parametre-modele.php';
 
 $titrePage       = 'Perroquets élevés à la main au Canada';
 $descriptionPage = t('meta_description_defaut');
@@ -36,17 +37,22 @@ $emojisEspeces = [
     'eclectus'               => '💚',
 ];
 
-/* Espèces vedettes : l'accueil n'affiche que les espèces phares (curatées)
-   pour ne pas surcharger la page. Le reste se découvre sur la page liste.
-   Repli : si aucune vedette n'est en base, on prend les premières espèces. */
-$slugsVedettes = ['gris-du-gabon', 'ara-ararauna', 'cacatoes-a-huppe-jaune', 'eclectus'];
+/* Espèces vedettes : l'accueil n'affiche que les espèces phares pour ne pas
+   surcharger la page. La sélection et le nombre sont pilotés depuis l'admin
+   (Paramètres → Page d'accueil) ; repli sur une sélection codée par défaut. */
+$slugsVedettesDefaut = ['gris-du-gabon', 'ara-ararauna', 'cacatoes-a-huppe-jaune', 'eclectus'];
+$slugsConfig   = array_filter(array_map('trim', explode(',', param('accueil_vedettes_slugs', ''))));
+$slugsVedettes = $slugsConfig ?: $slugsVedettesDefaut;
+$nbVedettes    = max(1, (int) param('accueil_vedettes_nb', '4'));
+
 $especesVedettes = array_values(array_filter(
     $especes,
     fn($e) => in_array($e['slug_fr'] ?? '', $slugsVedettes, true)
 ));
 if (!$especesVedettes) {
-    $especesVedettes = array_slice($especes, 0, 4);
+    $especesVedettes = $especes; // repli : toutes, avant plafonnement
 }
+$especesVedettes = array_slice($especesVedettes, 0, $nbVedettes);
 
 require_once __DIR__ . '/../gabarits/entete.php';
 ?>
@@ -56,17 +62,21 @@ require_once __DIR__ . '/../gabarits/entete.php';
      ============================================================ -->
 <section class="hero">
     <div>
-        <p class="hero-pastille reveal">Élevage canadien · Oiseaux élevés à la main</p>
+        <p class="hero-pastille reveal"><?= echapper(param('accueil_hero_pastille', 'Élevage canadien · Oiseaux élevés à la main')) ?></p>
         <h1 class="hero-titre reveal">
-            Des oiseaux <em>passionnément</em><br>élevés pour vous
+            <?php $heroTitre = param('accueil_hero_titre', ''); ?>
+            <?php if ($heroTitre !== ''): ?>
+                <?= echapper($heroTitre) ?>
+            <?php else: ?>
+                Des oiseaux <em>passionnément</em><br>élevés pour vous
+            <?php endif; ?>
         </h1>
         <p class="hero-texte reveal">
-            Chaque perroquet que nous élevons est un individu unique, suivi depuis sa naissance
-            au Québec. Socialisés à la main, prêts à rejoindre votre famille.
+            <?= echapper(param('accueil_hero_texte', 'Chaque perroquet que nous élevons est un individu unique, suivi depuis sa naissance au Québec. Socialisés à la main, prêts à rejoindre votre famille.')) ?>
         </p>
         <div class="hero-btns reveal">
             <a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux"
-               class="btn btn-primaire btn-lg">Voir les oiseaux disponibles</a>
+               class="btn btn-primaire btn-lg"><?= echapper(param('accueil_hero_cta', 'Voir les oiseaux disponibles')) ?></a>
             <a href="#comment" class="btn btn-ghost btn-lg">Comment ça marche</a>
         </div>
         <div class="hero-stats reveal">
@@ -88,7 +98,14 @@ require_once __DIR__ . '/../gabarits/entete.php';
     <div class="hero-visuel reveal">
         <div class="hero-img-wrap">
             <span class="ef" aria-hidden="true">🦜</span>
-            <img src="<?= echapper(URL_SITE) ?>/assets/img/hero-perroquet.jpg"
+            <?php
+                $heroImage = param('accueil_hero_image', 'assets/img/hero-perroquet.jpg');
+                // URL absolue → telle quelle ; chemin relatif → préfixé par URL_SITE.
+                $heroImageSrc = preg_match('#^https?://#i', $heroImage)
+                    ? $heroImage
+                    : URL_SITE . '/' . ltrim($heroImage, '/');
+            ?>
+            <img src="<?= echapper($heroImageSrc) ?>"
                  alt="Perroquet ara perché sur l'épaule d'un éleveur québécois"
                  loading="eager"
                  onerror="this.style.display='none'">
@@ -267,9 +284,16 @@ require_once __DIR__ . '/../gabarits/entete.php';
      CTA FINAL
      ============================================================ -->
 <section class="cta-bandeau">
-    <h2 class="cta-titre reveal">Votre compagnon ailé<br>vous attend peut-être</h2>
+    <h2 class="cta-titre reveal">
+        <?php $ctaTitre = param('accueil_cta_titre', ''); ?>
+        <?php if ($ctaTitre !== ''): ?>
+            <?= echapper($ctaTitre) ?>
+        <?php else: ?>
+            Votre compagnon ailé<br>vous attend peut-être
+        <?php endif; ?>
+    </h2>
     <p class="cta-texte reveal">
-        Les oiseaux disponibles partent vite — chaque oiseau ne peut être réservé qu'une seule fois.
+        <?= echapper(param('accueil_cta_texte', 'Les oiseaux disponibles partent vite — chaque oiseau ne peut être réservé qu\'une seule fois.')) ?>
     </p>
     <a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux"
        class="btn btn-or btn-lg reveal">Voir les oiseaux disponibles →</a>

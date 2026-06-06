@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/inc/securite.php';
 require_once RACINE . '/modeles/parametre-modele.php';
+require_once RACINE . '/modeles/espece-modele.php';
 
 // Clés gérées par ce formulaire (sécurité : liste blanche).
 $champs = [
@@ -12,7 +13,16 @@ $champs = [
     'whatsapp_numero', 'whatsapp_message',
     // Indexation & Analytics
     'index_autoriser', 'verif_google', 'verif_bing', 'ga4_id', 'gtm_id', 'pixel_id',
+    // Page d'accueil
+    'accueil_hero_pastille', 'accueil_hero_titre', 'accueil_hero_texte',
+    'accueil_hero_cta', 'accueil_hero_image',
+    'accueil_cta_titre', 'accueil_cta_texte', 'accueil_vedettes_nb',
 ];
+
+// Espèces disponibles pour le choix des vedettes (cases à cocher).
+$especes = listerEspeces();
+// Slugs actuellement en vedette (stockés en CSV).
+$vedettesActuelles = array_filter(array_map('trim', explode(',', param('accueil_vedettes_slugs', ''))));
 
 $erreur = '';
 
@@ -29,6 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $valeurs[$cle] = trim($_POST[$cle] ?? '');
             }
         }
+
+        // Espèces vedettes : cases à cocher → CSV de slugs valides uniquement.
+        $slugsValides  = array_column($especes, 'slug_fr');
+        $vedettesPostees = $_POST['vedettes'] ?? [];
+        $vedettesPostees = is_array($vedettesPostees) ? $vedettesPostees : [];
+        $vedettesPostees = array_values(array_intersect($vedettesPostees, $slugsValides));
+        $valeurs['accueil_vedettes_slugs'] = implode(',', $vedettesPostees);
+
         enregistrerParametres($valeurs);
         // PRG : redirige pour recharger les valeurs fraîches.
         header('Location: ' . URL_SITE . '/admin/parametres.php?succes=1');
@@ -62,6 +80,7 @@ require_once __DIR__ . '/inc/entete-admin.php';
         <!-- Barre d'onglets -->
         <div class="param-onglets" role="tablist" aria-label="Sections des paramètres">
             <button type="button" class="param-onglet actif" role="tab" data-cible="panel-general">Général</button>
+            <button type="button" class="param-onglet" role="tab" data-cible="panel-accueil">Page d'accueil</button>
             <button type="button" class="param-onglet" role="tab" data-cible="panel-social">Réseaux sociaux</button>
             <button type="button" class="param-onglet" role="tab" data-cible="panel-contact">Contact &amp; WhatsApp</button>
             <button type="button" class="param-onglet" role="tab" data-cible="panel-indexation">Indexation &amp; Analytics</button>
@@ -97,6 +116,80 @@ require_once __DIR__ . '/inc/entete-admin.php';
                 <label for="partage_image">Image de partage par défaut (URL absolue)</label>
                 <input type="url" id="partage_image" name="partage_image" value="<?= $val('partage_image') ?>" placeholder="https://mapleperroquets.com/assets/img/partage.jpg">
                 <small class="texte-discret">Affichée lors d'un partage (Open Graph / Twitter) si la page n'a pas d'image propre. Recommandé : 1200×630 px.</small>
+            </div>
+        </section>
+
+        <!-- ===================== Page d'accueil ===================== -->
+        <section class="param-section param-panneau" id="panel-accueil" role="tabpanel" hidden>
+            <h2>Page d'accueil</h2>
+
+            <h3 class="param-sous-titre">Héros (bloc d'en-tête)</h3>
+
+            <div class="champ">
+                <label for="accueil_hero_pastille">Pastille (petit texte au-dessus du titre)</label>
+                <input type="text" id="accueil_hero_pastille" name="accueil_hero_pastille" value="<?= $val('accueil_hero_pastille') ?>" placeholder="Élevage canadien · Oiseaux élevés à la main" maxlength="80">
+            </div>
+
+            <div class="champ">
+                <label for="accueil_hero_titre">Titre principal</label>
+                <input type="text" id="accueil_hero_titre" name="accueil_hero_titre" value="<?= $val('accueil_hero_titre') ?>" placeholder="Des oiseaux passionnément élevés pour vous" maxlength="120">
+                <small class="texte-discret">Laisser vide pour garder le titre stylé par défaut (avec mise en valeur).</small>
+            </div>
+
+            <div class="champ">
+                <label for="accueil_hero_texte">Texte d'introduction</label>
+                <textarea id="accueil_hero_texte" name="accueil_hero_texte" rows="3" maxlength="320"><?= $val('accueil_hero_texte') ?></textarea>
+            </div>
+
+            <div class="champ">
+                <label for="accueil_hero_cta">Libellé du bouton principal</label>
+                <input type="text" id="accueil_hero_cta" name="accueil_hero_cta" value="<?= $val('accueil_hero_cta') ?>" placeholder="Voir les oiseaux disponibles" maxlength="40">
+            </div>
+
+            <div class="champ">
+                <label for="accueil_hero_image">Image du héros (chemin ou URL)</label>
+                <input type="text" id="accueil_hero_image" name="accueil_hero_image" value="<?= $val('accueil_hero_image') ?>" placeholder="assets/img/hero-perroquet.jpg" maxlength="255">
+                <small class="texte-discret">Chemin relatif (ex. <code>assets/img/hero-perroquet.jpg</code>) ou URL absolue. Vide = image par défaut.</small>
+            </div>
+
+            <h3 class="param-sous-titre">Espèces vedettes</h3>
+
+            <div class="champ">
+                <label>Espèces mises en avant sur l'accueil</label>
+                <?php if (empty($especes)) : ?>
+                    <p class="texte-discret">Aucune espèce en base. Ajoutez des espèces pour les mettre en vedette.</p>
+                <?php else : ?>
+                    <div class="param-vedettes">
+                        <?php foreach ($especes as $e) :
+                            $slug = $e['slug_fr'] ?? '';
+                        ?>
+                        <label class="champ-bascule">
+                            <input type="checkbox" name="vedettes[]" value="<?= echapper($slug) ?>"
+                                   <?= in_array($slug, $vedettesActuelles, true) ? 'checked' : '' ?>>
+                            <?= echapper($e['nom_commun_fr']) ?>
+                        </label>
+                        <?php endforeach; ?>
+                    </div>
+                    <small class="texte-discret">Si aucune case n'est cochée, l'accueil affiche un choix par défaut.</small>
+                <?php endif; ?>
+            </div>
+
+            <div class="champ">
+                <label for="accueil_vedettes_nb">Nombre maximum de vedettes affichées</label>
+                <input type="number" id="accueil_vedettes_nb" name="accueil_vedettes_nb" value="<?= $val('accueil_vedettes_nb', '4') ?>" min="1" max="8" step="1">
+                <small class="texte-discret">La grille est conçue pour 4. Au-delà, les cartes passent sur plusieurs rangées.</small>
+            </div>
+
+            <h3 class="param-sous-titre">Bandeau d'appel à l'action (bas de page)</h3>
+
+            <div class="champ">
+                <label for="accueil_cta_titre">Titre du bandeau</label>
+                <input type="text" id="accueil_cta_titre" name="accueil_cta_titre" value="<?= $val('accueil_cta_titre') ?>" placeholder="Votre compagnon ailé vous attend peut-être" maxlength="120">
+            </div>
+
+            <div class="champ">
+                <label for="accueil_cta_texte">Texte du bandeau</label>
+                <textarea id="accueil_cta_texte" name="accueil_cta_texte" rows="2" maxlength="240"><?= $val('accueil_cta_texte') ?></textarea>
             </div>
         </section>
 
