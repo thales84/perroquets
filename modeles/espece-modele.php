@@ -26,7 +26,7 @@ function recupererEspecesAvecNbDisponibles(): array
     $pdo = obtenirConnexion();
     $req = $pdo->query("
         SELECT e.id_espece, e.nom_commun_fr, e.nom_scientifique, e.slug_fr,
-               e.description_fr,
+               e.famille_fr, e.description_fr,
                COUNT(o.id_oiseau) AS nb_disponibles
         FROM espece e
         LEFT JOIN oiseau o ON o.id_espece = e.id_espece AND o.statut = 'disponible'

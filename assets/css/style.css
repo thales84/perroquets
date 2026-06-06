@@ -506,22 +506,29 @@ address { font-style: normal; }
 .carte-esp {
     position: relative; border-radius: var(--rayon); overflow: hidden;
     aspect-ratio: 3/4; display: block; cursor: pointer;
+    box-shadow: var(--ombre);
+    transition: box-shadow var(--t), transform var(--t);
 }
-.carte-esp-img { position: absolute; inset: 0; }
-.carte-esp-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .55s ease; }
-.carte-esp:hover .carte-esp-img img { transform: scale(1.07); }
-.carte-esp-emoji {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 6rem; pointer-events: none;
+.carte-esp:hover { box-shadow: var(--ombre-lg); transform: translateY(-5px); }
+/* Lumière douce en haut : donne du relief au dégradé uni */
+.carte-esp::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(120% 80% at 25% 0%, rgba(255,255,255,.22), transparent 60%);
 }
 .carte-esp-grad {
     position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(36,28,22,.88) 0%, rgba(36,28,22,.05) 65%, transparent 100%);
+    background: linear-gradient(to top, rgba(20,16,12,.55) 0%, rgba(20,16,12,.08) 55%, transparent 100%);
 }
 .carte-esp-contenu { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem 1.25rem; }
-.carte-esp-nom { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 700; color: #fff; margin-bottom: .15rem; }
-.carte-esp-sous { font-size: .75rem; color: rgba(255,255,255,.65); margin-bottom: .65rem; }
+.carte-esp-famille {
+    display: inline-block; font-size: .62rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .12em;
+    color: rgba(255,255,255,.85);
+    background: rgba(255,255,255,.16); padding: .2rem .6rem; border-radius: 1rem;
+    margin-bottom: .65rem;
+}
+.carte-esp-nom { font-family: 'Fraunces', serif; font-size: 1.35rem; line-height: 1.1; font-weight: 700; color: #fff; margin-bottom: .2rem; }
+.carte-esp-sous { font-size: .78rem; font-style: italic; color: rgba(255,255,255,.78); margin-bottom: .8rem; }
 .carte-esp-fleche {
     display: inline-flex; align-items: center; justify-content: center;
     width: 2rem; height: 2rem; border-radius: 50%;

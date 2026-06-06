@@ -12,29 +12,36 @@ $especes = recupererEspecesAvecNbDisponibles();
 $oiseaux = array_slice(recupererOiseauxDisponibles(), 0, 6);
 $nbTotal = (int) array_sum(array_column($especes, 'nb_disponibles'));
 
-/* Mapping photos d'espèces (fichiers dans assets/img/) */
-$photosEspeces = [
-    'gris-du-gabon'          => 'assets/img/espece-gris-du-gabon.jpg',
-    'ara-ararauna'           => 'assets/img/espece-ara-ararauna.jpg',
-    'cacatoes-a-huppe-jaune' => 'assets/img/espece-cacatoes.jpg',
-];
+/* Cartes d'espèces typographiques : un dégradé propre par espèce + un
+   sous-titre « personnalité ». Pas de photo requise (repli sur le nom
+   scientifique pour les espèces non curatées). */
 $fondsEspeces = [
-    'gris-du-gabon'          => 'linear-gradient(145deg,#2a2a2a,#555)',
+    'gris-du-gabon'          => 'linear-gradient(145deg,#3a3a3a,#6a6a6a)',
     'ara-ararauna'           => 'linear-gradient(145deg,#0d3d7a,#1565c0)',
-    'cacatoes-a-huppe-jaune' => 'linear-gradient(145deg,#5a4a3a,#8a7060)',
+    'ara-macao'              => 'linear-gradient(145deg,#7a1f12,#c0392b)',
+    'ara-hyacinthe'          => 'linear-gradient(145deg,#10256b,#2a4bd0)',
+    'cacatoes-a-huppe-jaune' => 'linear-gradient(145deg,#8a6d2f,#d9b24a)',
+    'cacatoes-alba'          => 'linear-gradient(145deg,#5a6470,#9aa7b5)',
+    'cacatoes-rosalbin'      => 'linear-gradient(145deg,#8a4a63,#d98aa8)',
+    'cacatoes-de-goffin'     => 'linear-gradient(145deg,#6a6a6a,#9a9a9a)',
     'eclectus'               => 'linear-gradient(145deg,#0f5132,#198754)',
+    'amazone-a-front-bleu'   => 'linear-gradient(145deg,#14532d,#2f8f4e)',
+    'youyou-du-senegal'      => 'linear-gradient(145deg,#5a4a1f,#9a8030)',
+    'calopsitte'             => 'linear-gradient(145deg,#7a6a4a,#b59a6a)',
 ];
 $sousEspeces = [
     'gris-du-gabon'          => 'Le génie de la parole',
     'ara-ararauna'           => 'La star des couleurs',
+    'ara-macao'              => 'Le feu écarlate',
+    'ara-hyacinthe'          => 'Le géant bleu',
     'cacatoes-a-huppe-jaune' => 'Le clown câlin',
+    'cacatoes-alba'          => 'Le tendre démonstratif',
+    'cacatoes-rosalbin'      => 'Le rose espiègle',
+    'cacatoes-de-goffin'     => 'Le petit ingénieux',
     'eclectus'               => 'Le joyau émeraude',
-];
-$emojisEspeces = [
-    'gris-du-gabon'          => '🐦',
-    'ara-ararauna'           => '💙',
-    'cacatoes-a-huppe-jaune' => '🤍',
-    'eclectus'               => '💚',
+    'amazone-a-front-bleu'   => 'Le jovial bavard',
+    'youyou-du-senegal'      => 'Le compagnon discret',
+    'calopsitte'             => 'Le siffleur facile',
 ];
 
 /* Espèces vedettes : l'accueil n'affiche que les espèces phares pour ne pas
@@ -155,26 +162,20 @@ require_once __DIR__ . '/../gabarits/entete.php';
     <p class="s-sous reveal">Chaque espèce a sa propre personnalité. Laquelle correspond à votre mode de vie&nbsp;?</p>
     <div class="especes-grille">
         <?php foreach ($especesVedettes as $i => $e):
-            $slug   = $e['slug_fr'] ?? '';
-            $photo  = $photosEspeces[$slug] ?? null;
-            $fond   = $fondsEspeces[$slug]  ?? 'linear-gradient(145deg, var(--jungle-fonce), var(--turquoise))';
-            $sous   = $sousEspeces[$slug]   ?? '';
-            $emoji  = $emojisEspeces[$slug] ?? '🦜';
-            $lien   = echapper(URL_SITE) . '/' . $langue . '/oiseaux?id_espece=' . (int)$e['id_espece'];
+            $slug    = $e['slug_fr'] ?? '';
+            $fond    = $fondsEspeces[$slug] ?? 'linear-gradient(145deg, var(--jungle-fonce), var(--turquoise))';
+            $sous    = $sousEspeces[$slug]  ?? ($e['nom_scientifique'] ?? '');
+            $famille = $e['famille_fr'] ?? '';
+            $lien    = echapper(URL_SITE) . '/' . $langue . '/oiseaux?id_espece=' . (int)$e['id_espece'];
         ?>
         <a href="<?= $lien ?>" class="carte-esp reveal d<?= min($i + 1, 4) ?>"
+           style="background:<?= echapper($fond) ?>;"
            aria-label="Voir les <?= echapper($e['nom_commun_fr']) ?>">
-            <div class="carte-esp-img" style="background:<?= echapper($fond) ?>;">
-                <?php if ($photo): ?>
-                <img src="<?= echapper(URL_SITE . '/' . $photo) ?>"
-                     alt="<?= echapper($e['nom_commun_fr']) ?>"
-                     loading="lazy"
-                     onerror="this.style.display='none'">
-                <?php endif; ?>
-            </div>
-            <div class="carte-esp-emoji" aria-hidden="true"><?= $emoji ?></div>
             <div class="carte-esp-grad"></div>
             <div class="carte-esp-contenu">
+                <?php if ($famille): ?>
+                <span class="carte-esp-famille"><?= echapper($famille) ?></span>
+                <?php endif; ?>
                 <div class="carte-esp-nom"><?= echapper($e['nom_commun_fr']) ?></div>
                 <?php if ($sous): ?>
                 <div class="carte-esp-sous"><?= echapper($sous) ?></div>
