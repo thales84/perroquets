@@ -329,6 +329,20 @@ address { font-style: normal; }
 }
 .nav-panel-btn-decon:hover { background: var(--fond-2); color: var(--encre); }
 
+/* Lien admin — nav-liens desktop */
+.nav-liens a.lien-admin {
+    font-size: .8rem;
+    opacity: .55;
+    border: 1px solid transparent;
+}
+.nav-liens a.lien-admin:hover { opacity: 1; color: var(--ara); background: rgba(211,70,41,.06); }
+.nav-liens a.lien-admin--connecte { opacity: .75; color: var(--jungle); }
+.nav-liens a.lien-admin--connecte:hover { color: var(--jungle-fonce); background: rgba(31,110,76,.07); }
+
+/* Lien admin — panel mobile */
+.nav-panel-lien--admin { color: var(--doux); opacity: .8; }
+.nav-panel-lien--admin:hover { opacity: 1; background: var(--fond-2); }
+
 /* Pied */
 .nav-panel-pied {
     padding: 1.25rem;
