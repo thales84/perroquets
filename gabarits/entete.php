@@ -30,6 +30,9 @@ $ogImage = $ogImage ?: (param('partage_image') ?: null);
 // État de connexion client (session déjà démarrée par index.php)
 $clientConnecte = !empty($_SESSION['client_id']);
 $prenomClient   = htmlspecialchars($_SESSION['client_prenom'] ?? '', ENT_QUOTES);
+
+// État de connexion admin (même session PHP)
+$adminConnecte = !empty($_SESSION['admin_id']);
 ?>
 <!DOCTYPE html>
 <html lang="<?= echapper($langue) ?>-CA">
@@ -105,6 +108,11 @@ $prenomClient   = htmlspecialchars($_SESSION['client_prenom'] ?? '', ENT_QUOTES)
         <nav class="nav-liens" aria-label="Navigation principale">
             <a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux">Nos oiseaux</a>
             <a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/">Comment ça marche</a>
+            <?php if ($adminConnecte): ?>
+                <a href="<?= echapper(URL_SITE) ?>/admin/" class="lien-admin lien-admin--connecte">⚙️ Dashboard</a>
+            <?php else: ?>
+                <a href="<?= echapper(URL_SITE) ?>/admin/connexion.php" class="lien-admin">🔐 Admin</a>
+            <?php endif; ?>
         </nav>
 
         <div class="header-actions">
@@ -203,6 +211,22 @@ $prenomClient   = htmlspecialchars($_SESSION['client_prenom'] ?? '', ENT_QUOTES)
         <a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/inscription"
            class="nav-panel-lien nav-panel-lien--highlight">
             <span class="nav-panel-icone">✨</span> Créer un compte gratuit
+        </a>
+        <?php endif; ?>
+
+        <div class="nav-panel-sep"></div>
+
+        <!-- Administration -->
+        <p class="nav-panel-section-titre">Administration</p>
+        <?php if ($adminConnecte): ?>
+        <a href="<?= echapper(URL_SITE) ?>/admin/" class="nav-panel-lien nav-panel-lien--admin">
+            <span class="nav-panel-icone">⚙️</span> Dashboard admin
+            <span class="nav-panel-fleche">›</span>
+        </a>
+        <?php else: ?>
+        <a href="<?= echapper(URL_SITE) ?>/admin/connexion.php" class="nav-panel-lien nav-panel-lien--admin">
+            <span class="nav-panel-icone">🔐</span> Connexion admin
+            <span class="nav-panel-fleche">›</span>
         </a>
         <?php endif; ?>
 
