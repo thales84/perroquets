@@ -68,6 +68,7 @@ $lieu   = implode(', ', array_filter([$coord['ville'], $coord['province_nom']]))
 
 <?= genererBoutonWhatsapp() ?>
 
-<script src="<?= echapper(URL_SITE) ?>/assets/js/main.js"></script>
+<?php $vJs = @filemtime(__DIR__ . '/../assets/js/main.js') ?: time(); ?>
+<script src="<?= echapper(URL_SITE) ?>/assets/js/main.js?v=<?= (int) $vJs ?>"></script>
 </body>
 </html>

@@ -63,7 +63,12 @@ $adminConnecte = !empty($_SESSION['admin_id']);
     <link rel="apple-touch-icon" href="<?= echapper(URL_SITE) ?>/assets/img/apple-touch-icon.png">
 
     <!-- Feuille de style principale -->
-    <link rel="stylesheet" href="<?= echapper(URL_SITE) ?>/assets/css/style.css">
+    <?php
+        // Version = date de modification : force le rechargement après chaque déploiement
+        // (le serveur met le CSS en cache 7 jours).
+        $vCss = @filemtime(__DIR__ . '/../assets/css/style.css') ?: time();
+    ?>
+    <link rel="stylesheet" href="<?= echapper(URL_SITE) ?>/assets/css/style.css?v=<?= (int) $vCss ?>">
 
     <?php if ($urlCanonique): ?>
     <?= genererCanonical($urlCanonique) ?>
