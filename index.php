@@ -25,6 +25,7 @@ $cartographie = [
     'deconnexion'  => 'pages/deconnexion.php',
     'compte'       => 'pages/compte.php',
     'suivi'        => 'pages/suivi.php',
+    'conditions'   => 'pages/expedition-garantie.php',
     '404'          => 'pages/404.php',
 ];
 

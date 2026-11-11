@@ -108,6 +108,7 @@ $adminConnecte = !empty($_SESSION['admin_id']);
         <nav class="nav-liens" aria-label="Navigation principale">
             <a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux">Nos oiseaux</a>
             <a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/">Comment ça marche</a>
+            <a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/expedition-et-garantie"><?= echapper(t('nav_conditions')) ?></a>
             <?php if ($adminConnecte): ?>
                 <a href="<?= echapper(URL_SITE) ?>/admin/" class="lien-admin lien-admin--connecte">⚙️ Dashboard</a>
             <?php else: ?>
@@ -169,6 +170,11 @@ $adminConnecte = !empty($_SESSION['admin_id']);
         <a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/#comment"
            class="nav-panel-lien">
             <span class="nav-panel-icone">❓</span> Comment ça marche
+            <span class="nav-panel-fleche">›</span>
+        </a>
+        <a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/expedition-et-garantie"
+           class="nav-panel-lien">
+            <span class="nav-panel-icone">🛡️</span> <?= echapper(t('nav_conditions')) ?>
             <span class="nav-panel-fleche">›</span>
         </a>
 

@@ -8,6 +8,7 @@ $sectionActive = 'dashboard';
 if (str_contains($cheminScript, '/especes/'))           $sectionActive = 'especes';
 elseif (str_contains($cheminScript, '/oiseaux/'))        $sectionActive = 'oiseaux';
 elseif (str_contains($cheminScript, '/reservations/'))   $sectionActive = 'reservations';
+elseif (str_contains($cheminScript, '/temoignages/'))    $sectionActive = 'temoignages';
 elseif (str_contains($cheminScript, '/compte.php'))      $sectionActive = 'compte';
 elseif (str_contains($cheminScript, '/parametres.php'))  $sectionActive = 'parametres';
 
@@ -83,6 +84,10 @@ $identifiantAdmin = htmlspecialchars($_SESSION['admin_identifiant'] ?? 'Admin', 
                 <?php if ($nbNouvelles > 0): ?>
                 <span class="admin-nav-badge"><?= $nbNouvelles ?></span>
                 <?php endif; ?>
+            </a>
+            <a href="<?= echapper(URL_SITE) ?>/admin/temoignages/liste.php"
+               class="admin-nav-item <?= $sectionActive === 'temoignages' ? 'actif' : '' ?>">
+                <span class="admin-nav-icone">💬</span> Témoignages
             </a>
 
             <div class="admin-nav-sep"></div>

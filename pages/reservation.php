@@ -221,7 +221,7 @@ require_once __DIR__ . '/../gabarits/entete.php';
             </div>
             <?php else: ?>
             <div class="resa-info-block">
-                ✅ Aucun paiement en ligne requis. La remise se fait en personne, au Québec.
+                ✅ <?= echapper(t('resa_note_paiement')) ?>
             </div>
             <?php endif; ?>
 

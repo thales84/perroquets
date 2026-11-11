@@ -9,6 +9,12 @@ return [
     'nav_aras'             => '',
     'nav_cacatoes'         => '',
     'nav_langue'           => '',
+    'nav_conditions'       => '',
+
+    // Shipping & guarantee page
+    'conditions_eyebrow'     => '',
+    'conditions_titre'       => '',
+    'conditions_description' => '',
 
     // Home page
     'accueil_heros_titre'       => '',
@@ -39,6 +45,10 @@ return [
     'accueil_confiance3_texte'  => '',
     'accueil_confiance4_titre'  => '',
     'accueil_confiance4_texte'  => '',
+    'accueil_temoignages_eyebrow' => '',
+    'accueil_temoignages_titre'   => '',
+    'guillemet_ouvrant'           => '',
+    'guillemet_fermant'           => '',
     'accueil_cta_titre'         => '',
     'accueil_cta_texte'         => '',
     'accueil_cta_bouton'        => '',
@@ -82,6 +92,7 @@ return [
     'resa_email'           => '',
     'resa_telephone'       => '',
     'resa_province'        => '',
+    'resa_note_paiement'   => '',
     'resa_message'         => '',
     'resa_envoyer'         => '',
     'resa_confirmation'    => '',

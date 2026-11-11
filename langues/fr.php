@@ -9,10 +9,16 @@ return [
     'nav_aras'             => 'Aras',
     'nav_cacatoes'         => 'Cacatoès',
     'nav_langue'           => 'EN',
+    'nav_conditions'       => 'Expédition & garantie',
+
+    // Page « Réservation, expédition et garantie »
+    'conditions_eyebrow'     => 'Acheter en toute confiance',
+    'conditions_titre'       => 'Réservation, expédition et garantie',
+    'conditions_description' => 'Comment réserver un perroquet chez Maple Perroquets : voir l\'oiseau avant de payer, contrat écrit, prix fixé d\'avance, remise en personne ou expédition au Canada, garantie santé.',
 
     // Page accueil — héros
     'accueil_heros_titre'       => 'Des perroquets élevés avec passion',
-    'accueil_heros_sous_titre'  => 'Découvrez nos oiseaux disponibles, élevés à la main et socialisés dès leur naissance, au cœur du Québec.',
+    'accueil_heros_sous_titre'  => 'Découvrez nos oiseaux disponibles, élevés à la main et socialisés dès leur naissance dans notre élevage de Moncton, au Nouveau-Brunswick.',
     'accueil_voir_oiseaux'      => 'Voir les oiseaux disponibles',
     'accueil_notre_elevage'     => 'Notre élevage ↓',
 
@@ -34,7 +40,7 @@ return [
     'accueil_etape2_titre'      => 'Faites votre demande',
     'accueil_etape2_texte'      => 'Remplissez le formulaire de réservation en ligne. Zéro engagement — c\'est une simple prise de contact.',
     'accueil_etape3_titre'      => 'Accueillez votre compagnon',
-    'accueil_etape3_texte'      => 'Nous vous contactons sous 48 h pour organiser la remise en main propre au Québec.',
+    'accueil_etape3_texte'      => 'Nous vous contactons sous 48 h pour organiser la remise en personne ou l\'expédition au Canada.',
 
     // Page accueil — confiance
     'accueil_pourquoi_titre'    => 'Pourquoi choisir Maple Perroquets ?',
@@ -45,10 +51,14 @@ return [
     'accueil_confiance2_texte'  => 'Nos oiseaux bénéficient d\'un suivi médical régulier. Vous recevrez le carnet de santé complet à la remise.',
     'accueil_confiance3_titre'  => 'Alimentation naturelle',
     'accueil_confiance3_texte'  => 'Fruits frais, légumes et granules de qualité. Nos oiseaux sont nourris sainement pour bien démarrer leur vie.',
-    'accueil_confiance4_titre'  => 'Remise en personne',
-    'accueil_confiance4_texte'  => 'Nous prenons le temps de vous présenter votre oiseau, ses habitudes et ses besoins. Aucune expédition.',
+    'accueil_confiance4_titre'  => 'Achat en confiance',
+    'accueil_confiance4_texte'  => 'Vous voyez votre oiseau, en visite ou par appel vidéo, avant tout paiement. Contrat écrit et prix fixé d\'avance.',
 
     // Page accueil — CTA final
+    'accueil_temoignages_eyebrow' => 'Ils nous ont fait confiance',
+    'accueil_temoignages_titre'   => 'Ce que disent nos familles',
+    'guillemet_ouvrant'           => '« ',
+    'guillemet_fermant'           => ' »',
     'accueil_cta_titre'         => 'Prêt à accueillir votre compagnon ailé ?',
     'accueil_cta_texte'         => 'Nos oiseaux partent vite. Consultez dès maintenant ceux qui sont encore disponibles.',
     'accueil_cta_bouton'        => 'Voir tous les oiseaux disponibles',
@@ -92,6 +102,7 @@ return [
     'resa_email'           => 'Adresse courriel',
     'resa_telephone'       => 'Téléphone',
     'resa_province'        => 'Province',
+    'resa_note_paiement'   => 'Aucun paiement en ligne. Aucun acompte avant d\'avoir vu votre oiseau (visite ou appel vidéo) et reçu le contrat de vente.',
     'resa_message'         => 'Message (facultatif)',
     'resa_envoyer'         => 'Envoyer la demande',
     'resa_confirmation'    => 'Votre demande a bien été envoyée. Nous vous répondrons sous 48 h.',
@@ -117,5 +128,5 @@ return [
     'pied_pays'            => 'Canada',
 
     // SEO / méta (valeurs par défaut)
-    'meta_description_defaut' => 'Maple Perroquets — Perroquets élevés à la main au Canada. Gris du Gabon, Aras, Cacatoès disponibles au Québec.',
+    'meta_description_defaut' => 'Maple Perroquets — Perroquets élevés à la main au Canada. Gris du Gabon, Aras, Cacatoès. Élevage à Moncton, remise en personne ou expédition au Canada.',
 ];

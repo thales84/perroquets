@@ -31,6 +31,7 @@ $lieu   = implode(', ', array_filter([$coord['ville'], $coord['province_nom']]))
             <div class="footer-col-titre">Aide</div>
             <ul>
                 <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/">Comment ça marche</a></li>
+                <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/expedition-et-garantie"><?= echapper(t('nav_conditions')) ?></a></li>
                 <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/">Préparer l'accueil</a></li>
                 <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux">Voir les oiseaux</a></li>
             </ul>

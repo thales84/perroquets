@@ -648,6 +648,38 @@ address { font-style: normal; }
 }
 
 /* ----------------------------------------------------------------
+   Témoignages (accueil)
+   ---------------------------------------------------------------- */
+.temoignages-grille {
+    display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 2.5rem;
+}
+@media (min-width: 700px)  { .temoignages-grille { grid-template-columns: repeat(2,1fr); } }
+@media (min-width: 1000px) { .temoignages-grille { grid-template-columns: repeat(3,1fr); } }
+.temoignage {
+    margin: 0; display: flex; flex-direction: column; gap: 1rem;
+    background: var(--surface); border: 1px solid var(--bordure);
+    border-radius: var(--rayon); padding: 1.75rem; box-shadow: var(--ombre);
+}
+.temoignage-titre {
+    font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 700; color: var(--encre);
+}
+.temoignage-texte { margin: 0; flex: 1; }
+.temoignage-texte p { color: var(--doux); font-size: .9rem; line-height: 1.7; font-style: italic; }
+.temoignage-auteur {
+    display: flex; align-items: center; gap: .75rem;
+    padding-top: 1rem; border-top: 1px solid var(--bordure);
+    font-size: .88rem; color: var(--encre);
+}
+.temoignage-auteur strong { display: block; }
+.temoignage-initiale {
+    flex: none; width: 2.4rem; height: 2.4rem; border-radius: 50%;
+    background: var(--jungle); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-weight: 700;
+}
+.temoignage-lieu { display: block; color: var(--doux); font-size: .8rem; }
+
+/* ----------------------------------------------------------------
    Bandeau CTA final
    ---------------------------------------------------------------- */
 .cta-bandeau {
@@ -874,6 +906,36 @@ address { font-style: normal; }
 /* ----------------------------------------------------------------
    Page 404
    ---------------------------------------------------------------- */
+/* ----------------------------------------------------------------
+   Page « Réservation, expédition et garantie »
+   ---------------------------------------------------------------- */
+.page-conditions { max-width: 760px; margin: 3.5rem auto 5rem; padding: 0 1rem; color: var(--encre); }
+.page-conditions h1 { font-family: 'Fraunces', serif; font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1.15; margin: .4rem 0 1rem; }
+.page-conditions h2 { font-family: 'Fraunces', serif; font-size: 1.45rem; margin: 0 0 .9rem; }
+.page-conditions h3 { font-size: 1.02rem; font-weight: 700; margin: 1.5rem 0 .5rem; }
+.page-conditions p, .page-conditions li { line-height: 1.75; font-size: .97rem; }
+.page-conditions p { margin: 0 0 1rem; }
+.page-conditions ul, .page-conditions ol { padding-left: 1.3rem; margin: 0 0 1rem; }
+.page-conditions li { margin-bottom: .4rem; }
+.page-conditions section { padding: 2.25rem 0; border-top: 1px solid var(--bordure); scroll-margin-top: 5rem; }
+.page-conditions a { color: var(--jungle); }
+.conditions-chapo { color: var(--doux); font-size: 1.08rem !important; }
+.conditions-engagements {
+    background: var(--surface); border: 1px solid var(--bordure); border-left: 4px solid var(--jungle);
+    border-radius: var(--rayon); padding: 1.5rem 1.5rem .5rem; margin: 2rem 0; box-shadow: var(--ombre);
+}
+.conditions-engagements h2 { font-size: 1.15rem; }
+.conditions-engagements ul { list-style: none; padding: 0; }
+.conditions-engagements li { padding-left: 1.7rem; position: relative; }
+.conditions-engagements li::before { content: '✓'; position: absolute; left: 0; color: var(--jungle); font-weight: 700; }
+.conditions-sommaire { background: var(--fond-2); border-radius: var(--rayon-sm); padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+.conditions-sommaire ol { margin: 0; }
+.conditions-sommaire a { text-decoration: none; }
+.conditions-sommaire a:hover { text-decoration: underline; }
+.conditions-etapes li::marker { font-weight: 700; color: var(--jungle); }
+.conditions-note { font-size: .88rem !important; color: var(--doux); background: var(--fond-2); padding: .85rem 1rem; border-radius: var(--rayon-sm); }
+.conditions-contact address { font-style: normal; line-height: 1.8; margin-bottom: 1.5rem; }
+
 .page-404 { max-width: 600px; margin: 5rem auto; padding: 0 1.5rem; text-align: center; }
 .page-404-icone { font-size: 5rem; margin-bottom: 1rem; }
 .page-404 h1 { font-family: 'Fraunces', serif; font-size: 2rem; margin-bottom: .75rem; }

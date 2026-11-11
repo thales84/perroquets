@@ -29,6 +29,11 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         <priority>0.9</priority>
         <lastmod><?= $maintenant ?></lastmod>
     </url>
+    <url>
+        <loc><?= htmlspecialchars($base . '/fr/expedition-et-garantie', ENT_XML1) ?></loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
 
     <!-- Pages d'espèces -->
     <?php foreach ($especes as $espece) : ?>

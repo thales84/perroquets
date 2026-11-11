@@ -85,6 +85,10 @@ RewriteRule ^fr/suivi/?$ index.php?page=suivi&langue=fr [QSA,L]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^fr/expedition-et-garantie/?$ index.php?page=conditions&langue=fr [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^fr/?$ index.php?page=accueil&langue=fr [QSA,L]
 
 # ------------------------------------------------------------

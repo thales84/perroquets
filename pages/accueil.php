@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../modeles/espece-modele.php';
 require_once __DIR__ . '/../modeles/oiseau-modele.php';
 require_once __DIR__ . '/../modeles/parametre-modele.php';
+require_once __DIR__ . '/../modeles/temoignage-modele.php';
 
 $titrePage       = 'Perroquets élevés à la main au Canada';
 $descriptionPage = t('meta_description_defaut');
@@ -11,6 +12,10 @@ $langue          = langueActive();
 $especes = recupererEspecesAvecNbDisponibles();
 $oiseaux = array_slice(recupererOiseauxDisponibles(), 0, 6);
 $nbTotal = (int) array_sum(array_column($especes, 'nb_disponibles'));
+
+/* Témoignages publiés (6 max), section masquée s'il n'y en a aucun */
+$temoignages   = listerTemoignages(true, 6);
+$provincesNoms = provincesCanada();
 
 /* Cartes d'espèces typographiques : un dégradé propre par espèce + un
    sous-titre « personnalité ». Pas de photo requise (repli sur le nom
@@ -79,7 +84,7 @@ require_once __DIR__ . '/../gabarits/entete.php';
             <?php endif; ?>
         </h1>
         <p class="hero-texte reveal">
-            <?= echapper(param('accueil_hero_texte', 'Chaque perroquet que nous élevons est un individu unique, suivi depuis sa naissance au Québec. Socialisés à la main, prêts à rejoindre votre famille.')) ?>
+            <?= echapper(param('accueil_hero_texte', 'Chaque perroquet que nous élevons est un individu unique, suivi depuis sa naissance dans notre élevage. Socialisés à la main, prêts à rejoindre votre famille.')) ?>
         </p>
         <div class="hero-btns reveal">
             <a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux"
@@ -271,15 +276,50 @@ require_once __DIR__ . '/../gabarits/entete.php';
             <div class="proc-num">2</div>
             <div class="proc-titre">Envoyez votre demande</div>
             <p class="proc-texte">Remplissez le formulaire de réservation. Gratuit et sans engagement. Nous vous répondons sous 48&nbsp;h.</p>
-            <p class="proc-note">✅ Aucun paiement en ligne — remise en personne seulement.</p>
+            <p class="proc-note">✅ Aucun paiement avant d'avoir vu votre oiseau (visite ou appel vidéo).</p>
         </div>
         <div class="proc-etape reveal d2">
             <div class="proc-num">3</div>
             <div class="proc-titre">Accueillez votre compagnon</div>
-            <p class="proc-texte">Nous organisons une rencontre au Québec. Carnet de santé et conseils personnalisés remis le jour de l'adoption.</p>
+            <p class="proc-texte">Remise en personne à Moncton ou expédition au Canada par fret aérien. Carnet de santé et conseils personnalisés remis avec votre oiseau.</p>
         </div>
     </div>
 </section>
+
+<!-- ============================================================
+     TÉMOIGNAGES (gérés dans l'admin : menu « Témoignages »)
+     ============================================================ -->
+<?php if (!empty($temoignages)) : ?>
+<section class="section-fond-alt" id="temoignages">
+    <div class="section-inner">
+        <p class="eyebrow reveal"><?= echapper(t('accueil_temoignages_eyebrow')) ?></p>
+        <h2 class="s-titre reveal"><?= echapper(t('accueil_temoignages_titre')) ?></h2>
+        <div class="temoignages-grille">
+            <?php foreach ($temoignages as $i => $tem) :
+                $titreTem = ($langue === 'en' && $tem['titre_en'] !== '') ? $tem['titre_en'] : $tem['titre_fr'];
+                $texteTem = ($langue === 'en' && ($tem['texte_en'] ?? '') !== '') ? $tem['texte_en'] : $tem['texte_fr'];
+                $lieuTem  = implode(', ', array_filter([$tem['ville'], $provincesNoms[$tem['province']] ?? '']));
+            ?>
+            <figure class="temoignage reveal<?= $i % 3 ? ' d' . ($i % 3) : '' ?>">
+                <?php if ($titreTem !== '') : ?>
+                    <p class="temoignage-titre"><?= echapper($titreTem) ?></p>
+                <?php endif; ?>
+                <blockquote class="temoignage-texte">
+                    <p><?= echapper(t('guillemet_ouvrant') . $texteTem . t('guillemet_fermant')) ?></p>
+                </blockquote>
+                <figcaption class="temoignage-auteur">
+                    <span class="temoignage-initiale" aria-hidden="true"><?= echapper(mb_strtoupper(mb_substr($tem['auteur'], 0, 1))) ?></span>
+                    <span>
+                        <strong><?= echapper($tem['auteur']) ?></strong>
+                        <?php if ($lieuTem !== '') : ?><span class="temoignage-lieu"><?= echapper($lieuTem) ?></span><?php endif; ?>
+                    </span>
+                </figcaption>
+            </figure>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
 
 <!-- ============================================================
      CTA FINAL
