@@ -102,6 +102,9 @@ return [
     'pied_navigation'      => '',
     'pied_prix_cad'        => '',
     'pied_droits'          => '',
+    'pied_pitch_lieu'      => '',
+    'pied_pitch_depuis'    => '',
+    'pied_pays'            => '',
 
     // SEO / meta
     'meta_description_defaut' => '',

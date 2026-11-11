@@ -1,4 +1,9 @@
-<?php $langue = langueActive(); ?>
+<?php
+$langue = langueActive();
+// Coordonnées gérées dans l'admin (Paramètres > Contact & WhatsApp).
+$coord  = coordonneesEntreprise();
+$lieu   = implode(', ', array_filter([$coord['ville'], $coord['province_nom']]));
+?>
 </main>
 
 <!-- ============================================================
@@ -7,10 +12,10 @@
 <footer class="footer">
     <div class="footer-inner">
         <div>
-            <span class="footer-logo">🦜 Maple Perroquets</span>
+            <span class="footer-logo">🦜 <?= echapper($coord['nom']) ?></span>
             <p class="footer-pitch">
-                Éleveur passionné au Québec. Nos perroquets sont élevés à la main
-                avec amour et expertise depuis plus de 10&nbsp;ans.
+                <?= echapper($lieu !== '' ? str_replace('%lieu%', $lieu, t('pied_pitch_lieu')) : t('pied_slogan')) ?>
+                <?= echapper($coord['annee'] !== '' ? str_replace('%annee%', $coord['annee'], t('pied_pitch_depuis')) : t('pied_slogan2')) ?>
             </p>
         </div>
         <div class="footer-col">
@@ -31,15 +36,26 @@
             </ul>
         </div>
         <div class="footer-col">
-            <div class="footer-col-titre">Contact</div>
+            <div class="footer-col-titre"><?= echapper(t('pied_contact')) ?></div>
             <ul>
-                <li><a href="mailto:bonjour@mapleperroquets.com">bonjour@mapleperroquets.com</a></li>
-                <li><a href="<?= echapper(URL_SITE) ?>/<?= echapper($langue) ?>/oiseaux">Québec, Canada 🍁</a></li>
+                <?php if ($coord['courriel'] !== '') : ?>
+                    <li><a href="mailto:<?= echapper($coord['courriel']) ?>"><?= echapper($coord['courriel']) ?></a></li>
+                <?php endif; ?>
+                <?php if ($coord['telephone_lien'] !== '') : ?>
+                    <li><a href="tel:<?= echapper($coord['telephone_lien']) ?>"><?= echapper($coord['telephone']) ?></a></li>
+                <?php endif; ?>
+                <li>
+                    <address class="footer-adresse">
+                        <?php if ($coord['rue'] !== '') : ?><?= echapper($coord['rue']) ?><br><?php endif; ?>
+                        <?php if ($lieu !== '') : ?><?= echapper(trim($lieu . ' ' . $coord['code_postal'])) ?><br><?php endif; ?>
+                        <?= echapper(t('pied_pays')) ?> 🍁
+                    </address>
+                </li>
             </ul>
         </div>
     </div>
     <div class="footer-bas">
-        <span>&copy; <?= date('Y') ?> Maple Perroquets — Tous droits réservés.</span>
+        <span>&copy; <?= date('Y') ?> <?= echapper($coord['nom']) ?> — <?= echapper(t('pied_droits')) ?></span>
         <span>Élevage déclaré · Conforme à la réglementation canadienne sur la faune</span>
     </div>
 </footer>

@@ -676,6 +676,7 @@ address { font-style: normal; }
 .footer-col ul { display: flex; flex-direction: column; gap: .5rem; }
 .footer-col a { color: rgba(255,255,255,.52); font-size: .88rem; transition: color var(--t); }
 .footer-col a:hover { color: #fff; }
+.footer-adresse { color: rgba(255,255,255,.52); font-size: .88rem; line-height: 1.55; }
 .footer-bas {
     max-width: 1280px; margin: 3rem auto 0;
     padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,.08);

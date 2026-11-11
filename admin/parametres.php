@@ -9,6 +9,9 @@ $champs = [
     'site_nom', 'site_slogan', 'meta_titre_gabarit', 'meta_description', 'partage_image',
     // Réseaux sociaux
     'og_locale', 'twitter_compte', 'social_facebook', 'social_instagram',
+    // Coordonnées de l'entreprise (affichées dans le pied de page + JSON-LD)
+    'entreprise_rue', 'entreprise_ville', 'entreprise_province', 'entreprise_code_postal',
+    'entreprise_annee_creation', 'entreprise_telephone', 'entreprise_courriel',
     // Contact & WhatsApp
     'whatsapp_numero', 'whatsapp_message',
     // Indexation & Analytics
@@ -38,6 +41,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $valeurs[$cle] = trim($_POST[$cle] ?? '');
             }
+        }
+
+        // Coordonnées : validation et normalisation.
+        if (!array_key_exists($valeurs['entreprise_province'], provincesCanada())) {
+            $valeurs['entreprise_province'] = '';
+        }
+        $cp = strtoupper(preg_replace('/\s+/', '', $valeurs['entreprise_code_postal']));
+        if ($cp !== '' && !preg_match('/^[A-Z]\d[A-Z]\d[A-Z]\d$/', $cp)) {
+            $erreur = 'Code postal invalide (format canadien attendu, ex. E1G 1W3).';
+        }
+        $valeurs['entreprise_code_postal'] = $cp !== '' ? substr($cp, 0, 3) . ' ' . substr($cp, 3) : '';
+        $annee = $valeurs['entreprise_annee_creation'];
+        if ($annee !== '' && (!ctype_digit($annee) || (int) $annee < 1900 || (int) $annee > (int) date('Y'))) {
+            $erreur = "Année de création invalide (entre 1900 et " . date('Y') . ').';
+        }
+        if ($valeurs['entreprise_courriel'] !== '' && !filter_var($valeurs['entreprise_courriel'], FILTER_VALIDATE_EMAIL)) {
+            $erreur = 'Adresse courriel de contact invalide.';
+        }
+        if ($valeurs['entreprise_telephone'] !== '' && !preg_match('/^\+?[\d\s().-]{7,25}$/', $valeurs['entreprise_telephone'])) {
+            $erreur = 'Numéro de téléphone invalide.';
         }
 
         // Espèces vedettes : cases à cocher → CSV de slugs valides uniquement.
@@ -273,6 +296,51 @@ require_once __DIR__ . '/inc/entete-admin.php';
         <!-- ===================== Contact & WhatsApp ===================== -->
         <section class="param-section param-panneau" id="panel-contact" role="tabpanel" hidden>
             <h2>Contact &amp; WhatsApp</h2>
+
+            <h3 class="param-sous-titre">Coordonnées de l'entreprise</h3>
+            <p class="texte-discret">Affichées dans le pied de page du site et transmises aux moteurs de recherche (données structurées). Le nom est celui défini dans l'onglet « Général ».</p>
+
+            <div class="champ">
+                <label for="entreprise_rue">Adresse (numéro et rue)</label>
+                <input type="text" id="entreprise_rue" name="entreprise_rue" value="<?= $val('entreprise_rue') ?>" placeholder="61 Woodstone Cres" maxlength="120" autocomplete="street-address">
+            </div>
+
+            <div class="champ">
+                <label for="entreprise_ville">Ville</label>
+                <input type="text" id="entreprise_ville" name="entreprise_ville" value="<?= $val('entreprise_ville') ?>" placeholder="Moncton" maxlength="80">
+            </div>
+
+            <div class="champ">
+                <label for="entreprise_province">Province / territoire</label>
+                <select id="entreprise_province" name="entreprise_province">
+                    <option value="">— Choisir —</option>
+                    <?php foreach (provincesCanada() as $code => $nomProv) : ?>
+                        <option value="<?= echapper($code) ?>" <?= param('entreprise_province') === $code ? 'selected' : '' ?>><?= echapper($nomProv) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="champ">
+                <label for="entreprise_code_postal">Code postal</label>
+                <input type="text" id="entreprise_code_postal" name="entreprise_code_postal" value="<?= $val('entreprise_code_postal') ?>" placeholder="E1G 1W3" maxlength="7">
+            </div>
+
+            <div class="champ">
+                <label for="entreprise_telephone">Téléphone</label>
+                <input type="tel" id="entreprise_telephone" name="entreprise_telephone" value="<?= $val('entreprise_telephone') ?>" placeholder="+1 437-837-6858" maxlength="25">
+            </div>
+
+            <div class="champ">
+                <label for="entreprise_courriel">Courriel de contact</label>
+                <input type="email" id="entreprise_courriel" name="entreprise_courriel" value="<?= $val('entreprise_courriel') ?>" placeholder="contact@exemple.com" maxlength="120">
+            </div>
+
+            <div class="champ">
+                <label for="entreprise_annee_creation">Année de création</label>
+                <input type="number" id="entreprise_annee_creation" name="entreprise_annee_creation" value="<?= $val('entreprise_annee_creation') ?>" placeholder="2003" min="1900" max="<?= date('Y') ?>" step="1">
+            </div>
+
+            <h3 class="param-sous-titre">WhatsApp</h3>
 
             <div class="champ">
                 <label for="whatsapp_numero">Numéro WhatsApp</label>

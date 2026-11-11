@@ -42,6 +42,57 @@ function param(string $cle, string $defaut = ''): string
 }
 
 /**
+ * Provinces et territoires canadiens (code postal officiel => nom français).
+ *
+ * @return array<string,string>
+ */
+function provincesCanada(): array
+{
+    return [
+        'AB' => 'Alberta',
+        'BC' => 'Colombie-Britannique',
+        'PE' => 'Île-du-Prince-Édouard',
+        'MB' => 'Manitoba',
+        'NB' => 'Nouveau-Brunswick',
+        'NS' => 'Nouvelle-Écosse',
+        'NU' => 'Nunavut',
+        'ON' => 'Ontario',
+        'QC' => 'Québec',
+        'SK' => 'Saskatchewan',
+        'NL' => 'Terre-Neuve-et-Labrador',
+        'NT' => 'Territoires du Nord-Ouest',
+        'YT' => 'Yukon',
+    ];
+}
+
+/**
+ * Coordonnées publiques de l'entreprise (NAP : nom, adresse, téléphone),
+ * gérées dans l'admin (Paramètres > Contact). Valeurs brutes, non échappées.
+ *
+ * @return array<string,string>
+ */
+function coordonneesEntreprise(): array
+{
+    $provinces = provincesCanada();
+    $codeProv  = param('entreprise_province');
+    $telephone = param('entreprise_telephone');
+
+    return [
+        'nom'           => param('site_nom', 'Maple Perroquets'),
+        'rue'           => param('entreprise_rue'),
+        'ville'         => param('entreprise_ville'),
+        'province'      => $codeProv,
+        'province_nom'  => $provinces[$codeProv] ?? '',
+        'code_postal'   => param('entreprise_code_postal'),
+        'telephone'     => $telephone,
+        // Lien tel: — chiffres et « + » initial uniquement.
+        'telephone_lien'=> preg_replace('/(?!^\+)[^\d]/', '', $telephone) ?? '',
+        'courriel'      => param('entreprise_courriel'),
+        'annee'         => param('entreprise_annee_creation'),
+    ];
+}
+
+/**
  * Enregistre (insert ou update) un lot de paramètres.
  *
  * @param array<string,string> $valeurs

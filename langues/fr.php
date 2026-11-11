@@ -112,6 +112,9 @@ return [
     'pied_navigation'      => 'Navigation',
     'pied_prix_cad'        => 'Prix en dollars canadiens (CAD).',
     'pied_droits'          => 'Tous droits réservés.',
+    'pied_pitch_lieu'      => 'Éleveur passionné à %lieu%.',
+    'pied_pitch_depuis'    => 'Nos perroquets sont élevés à la main avec amour et expertise depuis %annee%.',
+    'pied_pays'            => 'Canada',
 
     // SEO / méta (valeurs par défaut)
     'meta_description_defaut' => 'Maple Perroquets — Perroquets élevés à la main au Canada. Gris du Gabon, Aras, Cacatoès disponibles au Québec.',

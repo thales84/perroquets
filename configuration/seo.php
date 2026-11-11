@@ -113,7 +113,8 @@ function genererMetaIndexation(): string
 
 /**
  * JSON-LD Organization (global, sur toutes les pages publiques).
- * Sans adresse (NAP non configuré) : nom, URL, logo/image, sameAs.
+ * Nom, URL, logo/image, sameAs + NAP (adresse, téléphone, courriel,
+ * année de création) si renseignés dans l'admin.
  */
 function genererOrganisationJsonLd(): string
 {
@@ -136,6 +137,28 @@ function genererOrganisationJsonLd(): string
     }
     if (!empty($sameAs)) {
         $org['sameAs'] = $sameAs;
+    }
+
+    // NAP (Paramètres > Contact) : renforce le référencement local.
+    $c = coordonneesEntreprise();
+    if ($c['telephone'] !== '') {
+        $org['telephone'] = $c['telephone_lien'];
+    }
+    if ($c['courriel'] !== '') {
+        $org['email'] = $c['courriel'];
+    }
+    if ($c['annee'] !== '') {
+        $org['foundingDate'] = $c['annee'];
+    }
+    if ($c['ville'] !== '' || $c['rue'] !== '') {
+        $org['address'] = array_filter([
+            '@type'           => 'PostalAddress',
+            'streetAddress'   => $c['rue'],
+            'addressLocality' => $c['ville'],
+            'addressRegion'   => $c['province'],
+            'postalCode'      => $c['code_postal'],
+            'addressCountry'  => 'CA',
+        ], fn($v) => $v !== '');
     }
 
     return json_encode($org, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
