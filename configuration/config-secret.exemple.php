@@ -24,5 +24,12 @@ define('BD_MOT_DE_PASSE',  'REMPLACER_PAR_LE_MOT_DE_PASSE_BD');
 // --- URL publique (sans barre oblique finale) ---
 define('URL_SITE', 'https://mapleperroquets.com');
 
+// --- Envoi des courriels (SMTP Hostinger, boîte no-reply) ---
+// Sans SMTP_MOT_DE_PASSE, le site se replie sur mail() de PHP.
+define('SMTP_HOTE',         'smtp.hostinger.com');
+define('SMTP_PORT',         465);              // 465 = SSL ; 587 = STARTTLS
+define('SMTP_UTILISATEUR',  'no-reply@mapleperroquets.com');
+define('SMTP_MOT_DE_PASSE', 'REMPLACER_PAR_LE_MOT_DE_PASSE_DE_LA_BOITE');
+
 // --- Mode développement : false en production ---
 define('MODE_DEVELOPPEMENT', false);

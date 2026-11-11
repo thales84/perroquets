@@ -7,6 +7,7 @@ require_once RACINE . '/modeles/espece-modele.php';
 $champs = [
     // Général
     'site_nom', 'site_slogan', 'meta_titre_gabarit', 'meta_description', 'partage_image',
+    'pied_copyright',
     // Réseaux sociaux
     'og_locale', 'twitter_compte', 'social_facebook', 'social_instagram',
     // Coordonnées de l'entreprise (affichées dans le pied de page + JSON-LD)
@@ -173,6 +174,12 @@ require_once __DIR__ . '/inc/entete-admin.php';
                 <input type="url" id="partage_image" name="partage_image" value="<?= $val('partage_image') ?>" placeholder="https://mapleperroquets.com/assets/img/partage.jpg">
                 <small class="texte-discret">Affichée lors d'un partage (Open Graph / Twitter) si la page n'a pas d'image propre. Recommandé : 1200×630 px.</small>
             </div>
+
+            <div class="champ">
+                <label for="pied_copyright">Mention de copyright (bas de page)</label>
+                <input type="text" id="pied_copyright" name="pied_copyright" value="<?= $val('pied_copyright') ?>" placeholder="© %annee% %site% — Tous droits réservés." maxlength="200">
+                <small class="texte-discret">Variables disponibles : <code>%annee%</code> (année en cours, mise à jour automatiquement), <code>%site%</code> (nom du site). Vide = mention par défaut.</small>
+            </div>
         </section>
 
         <!-- ===================== Page d'accueil ===================== -->
@@ -333,6 +340,7 @@ require_once __DIR__ . '/inc/entete-admin.php';
             <div class="champ">
                 <label for="entreprise_courriel">Courriel de contact</label>
                 <input type="email" id="entreprise_courriel" name="entreprise_courriel" value="<?= $val('entreprise_courriel') ?>" placeholder="contact@exemple.com" maxlength="120">
+                <small class="texte-discret">Affiché sur le site et utilisé pour recevoir une notification à chaque nouvelle réservation.</small>
             </div>
 
             <div class="champ">

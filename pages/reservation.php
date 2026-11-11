@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../modeles/oiseau-modele.php';
 require_once __DIR__ . '/../modeles/reservation-modele.php';
 require_once __DIR__ . '/../modeles/client-modele.php';
+require_once __DIR__ . '/../configuration/courriel.php';
 
 $slug   = obtenirParametreUrl('slug');
 $langue = langueActive();
@@ -81,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $disponible) {
     if ($idOiseau !== (int) $oiseau['id_oiseau'])                    $erreurs['_global']  = t('resa_erreur');
 
     if (empty($erreurs)) {
-        $ok = enregistrerReservation([
+        $donneesResa = [
             'client_id'      => $clientConnecteId, // null si invité
             'id_oiseau'      => $idOiseau,
             'nom_client'     => $valeurs['nom'],
@@ -90,8 +91,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $disponible) {
             'province'       => $provinces[$valeurs['province']] ?? '',
             'message'        => $valeurs['message'],
             'langue_demande' => $langueForm,
-        ]);
-        if ($ok) {
+        ];
+        $idResa = enregistrerReservation($donneesResa);
+        if ($idResa > 0) {
+            // Notification à l'admin (échec silencieux : la réservation reste valide).
+            notifierAdminReservation($idResa, $donneesResa, $oiseau);
             // Client connecté → tableau de bord avec confirmation, sinon page générique
             if ($clientConnecteId) {
                 rediriger('/' . $langue . '/mon-compte?succes=reservation');

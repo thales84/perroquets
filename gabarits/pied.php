@@ -55,7 +55,12 @@ $lieu   = implode(', ', array_filter([$coord['ville'], $coord['province_nom']]))
         </div>
     </div>
     <div class="footer-bas">
-        <span>&copy; <?= date('Y') ?> <?= echapper($coord['nom']) ?> — <?= echapper(t('pied_droits')) ?></span>
+        <?php
+            // Mention personnalisable (Paramètres > Général), sinon mention par défaut.
+            $copyright = param('pied_copyright', '© %annee% %site% — ' . t('pied_droits'));
+            $copyright = str_replace(['%annee%', '%site%'], [date('Y'), $coord['nom']], $copyright);
+        ?>
+        <span><?= echapper($copyright) ?></span>
         <span>Élevage déclaré · Conforme à la réglementation canadienne sur la faune</span>
     </div>
 </footer>

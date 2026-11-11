@@ -6,9 +6,9 @@ require_once __DIR__ . '/../configuration/connexion.php';
  *
  * @param  array $donnees Champs validés : id_oiseau, nom_client, email_client,
  *                        telephone, province, message, langue_demande
- * @return bool           true si insertion réussie
+ * @return int            id de la réservation créée, 0 en cas d'échec
  */
-function enregistrerReservation(array $donnees): bool
+function enregistrerReservation(array $donnees): int
 {
     $pdo = obtenirConnexion();
 
@@ -21,7 +21,7 @@ function enregistrerReservation(array $donnees): bool
              :message, :langue_demande, 'nouvelle')
     ");
 
-    return $req->execute([
+    $ok = $req->execute([
         ':client_id'      => isset($donnees['client_id']) ? (int) $donnees['client_id'] : null,
         ':id_oiseau'      => (int) $donnees['id_oiseau'],
         ':nom_client'     => mb_substr(trim($donnees['nom_client']), 0, 120),
@@ -32,6 +32,8 @@ function enregistrerReservation(array $donnees): bool
         ':langue_demande' => in_array($donnees['langue_demande'] ?? '', ['fr', 'en'], true)
                              ? $donnees['langue_demande'] : 'fr',
     ]);
+
+    return $ok ? (int) $pdo->lastInsertId() : 0;
 }
 
 // ============================================================
